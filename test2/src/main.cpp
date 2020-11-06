@@ -1,4 +1,5 @@
 #include "main.h"
+#include <stm32f030x6.h>
 
 /**
  * Main program.

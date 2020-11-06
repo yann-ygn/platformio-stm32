@@ -1,6 +1,5 @@
 #include <stdint.h>
 #include "gpio.h"
-
 void Bank::bankSetup()
 {
     #ifdef GPIOB

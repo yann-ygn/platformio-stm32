@@ -2,7 +2,7 @@
 #define GPIO_H
 
 #include <stdint.h>
-#include <stm32f030x6.h>
+#include <stm32f031x6.h>
 
 // Port mode register values
 #define GPIO_MODER_INPUT    0x0
@@ -24,7 +24,7 @@
 #define GPIO_PUPDR_UP        0x1
 #define GPIO_PUPDR_DOWN     0x2
 
-enum pinSettings
+enum gpioPinSetting
 {
     pinInputFloating,
     pinInputPullUp,
@@ -98,10 +98,13 @@ class Pin
     private:
         Bank* m_pinBank;
         uint8_t m_pin;
-        pinSettings m_pinSettings;
+        gpioPinSetting m_pinSettings;
 
     public:
-        Pin(Bank* bank, uint8_t pin, pinSettings settings) : m_pinBank(bank), m_pin(pin), m_pinSettings(settings) { }
+        Pin(Bank* bank, uint8_t pin, gpioPinSetting settings) : m_pinBank(bank), m_pin(pin), m_pinSettings(settings) 
+        { 
+            bank->bankSetup();
+        }
 
         void pinSetup();
 };
