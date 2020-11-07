@@ -21,7 +21,7 @@
 
 // Port PU/PD register
 #define GPIO_PUPDR_NONE     0x0
-#define GPIO_PUPDR_UP        0x1
+#define GPIO_PUPDR_UP       0x1
 #define GPIO_PUPDR_DOWN     0x2
 
 enum gpioPinSetting
@@ -91,6 +91,28 @@ class Bank
          * 3 : High Speed
          */
         void setPinSpeed(uint8_t pin, uint8_t ospeed);
+
+        /**
+         * @brief Set the Pin On object
+         * 
+         * @param pin 
+         */
+        void pinOn(uint8_t pin);
+
+        /**
+         * @brief Set the Pin Off object
+         * 
+         * @param pin 
+         */
+        void pinOff(uint8_t pin);
+
+        /**
+         * @brief 
+         * 
+         * @param pin 
+         * @return uint32_t 
+         */
+        uint32_t readPin(uint8_t pin);
 };
 
 class Pin
@@ -98,15 +120,16 @@ class Pin
     private:
         Bank* m_pinBank;
         uint8_t m_pin;
+        uint8_t m_pinState = 0;
         gpioPinSetting m_pinSettings;
 
     public:
-        Pin(Bank* bank, uint8_t pin, gpioPinSetting settings) : m_pinBank(bank), m_pin(pin), m_pinSettings(settings) 
-        { 
-            bank->bankSetup();
-        }
+        Pin(Bank* bank, uint8_t pin, gpioPinSetting settings) : m_pinBank(bank), m_pin(pin), m_pinSettings(settings) { }
 
         void pinSetup();
+        void setPinState(uint8_t state);
+        uint8_t getPinState();
+        void togglePinState();
 };
 
 #endif

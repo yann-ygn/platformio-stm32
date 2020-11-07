@@ -5,12 +5,12 @@ void Bank::bankSetup()
     #ifdef GPIOB
     if (m_bank == GPIOB)
     {
-        uint32_t bankStatus = RCC->AHBENR & RCC_AHBENR_GPIOBEN; // Get the clock status
+        //uint32_t bankStatus = RCC->AHBENR & RCC_AHBENR_GPIOBEN; // Get the clock status
 
-        if (bankStatus != 0x40000) // 0x00040000 == enabled
-        {
+        //if (bankStatus != 0x40000) // 0x00040000 == enabled
+        //{
             RCC->AHBENR |= RCC_AHBENR_GPIOBEN;
-        }
+        //}
     } 
     #endif
 }
@@ -18,7 +18,7 @@ void Bank::bankSetup()
 void Bank::setPinMode(uint8_t pin, uint8_t mode)
 {
     m_bank->MODER &= ~(0x3 << (pin * 2)); // Reset the register
-    m_bank->MODER |= (mode << (pin *2)); // Set the register
+    m_bank->MODER |= (mode << (pin * 2)); // Set the register
 }
 
 void Bank::setPinType(uint8_t pin, uint8_t otype)
@@ -37,6 +37,21 @@ void Bank::setPinSpeed(uint8_t pin, uint8_t ospeed)
 {
     m_bank->OSPEEDR &= ~(0x3 << (pin * 2)); // Reset the register
     m_bank->OSPEEDR |= (ospeed << (pin * 2)); // Set the register
+}
+
+void Bank::pinOn(uint8_t pin)
+{
+    m_bank->BSRR = (1 << pin);
+}
+
+void Bank::pinOff(uint8_t pin)
+{
+    m_bank->BSRR = (1 << (pin + 16));
+}
+
+uint32_t Bank::readPin(uint8_t pin)
+{
+    return (m_bank->IDR & (1 << pin));
 }
 
 void Pin::pinSetup()
@@ -58,7 +73,63 @@ void Pin::pinSetup()
             m_pinBank->setPinPud(m_pin, GPIO_PUPDR_UP);
             break;
 
+        case pinOutputOpenDrain:
+            m_pinBank->setPinMode(m_pin, GPIO_MODER_OUTPUT);
+            m_pinBank->setPinType(m_pin, GPIO_OTYPER_OD);
+            m_pinBank->setPinSpeed(m_pin, GPIO_OSPEEDR_LOW);
+            m_pinBank->setPinPud(m_pin, GPIO_PUPDR_NONE);
+            break;
+
+        case pinOutputPushPull:
+            m_pinBank->setPinMode(m_pin, GPIO_MODER_OUTPUT);
+            m_pinBank->setPinType(m_pin, GPIO_OTYPER_PP);
+            m_pinBank->setPinSpeed(m_pin, GPIO_OSPEEDR_LOW);
+            m_pinBank->setPinPud(m_pin, GPIO_PUPDR_NONE);
+            break;
+
         default:
             break;
     }
+}
+
+void Pin::setPinState(uint8_t state)
+{
+    if (state == 1)
+    {
+        m_pinBank->pinOn(m_pin);
+    }
+    else
+    {
+        m_pinBank->pinOff(m_pin);
+    }
+
+    m_pinState = state;
+}
+
+uint8_t Pin::getPinState()
+{
+    if (m_pinBank->readPin(m_pin) & (1 << m_pin))
+    {
+        m_pinState = 1;
+    }
+    else
+    {
+        m_pinState = 0;
+    }
+
+    return m_pinState;
+}
+
+void Pin::togglePinState()
+{
+    if (m_pinState == 1)
+    {
+        m_pinBank->pinOff(m_pin);
+    }
+    else
+    {
+        m_pinBank->pinOn(m_pin);
+    }
+
+    m_pinState = !m_pinState;
 }
