@@ -1,16 +1,17 @@
 #include <stdint.h>
 #include "gpio.h"
+
 void Bank::bankSetup()
 {
     #ifdef GPIOB
     if (m_bank == GPIOB)
     {
-        //uint32_t bankStatus = RCC->AHBENR & RCC_AHBENR_GPIOBEN; // Get the clock status
+        uint32_t bankStatus = RCC->AHBENR & RCC_AHBENR_GPIOBEN; // Get the clock status
 
-        //if (bankStatus != 0x40000) // 0x00040000 == enabled
-        //{
+        if (bankStatus != 0x40000) // 0x00040000 == enabled
+        {
             RCC->AHBENR |= RCC_AHBENR_GPIOBEN;
-        //}
+        }
     } 
     #endif
 }

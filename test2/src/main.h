@@ -8,6 +8,7 @@
 #define BUTTON_PIN (1)
 #define LED_PIN    (3)
 
+void EXTI0_1_IRQHandler();
 
 // C++ memory regions for initializing statics.
 // ('fini_array' is ignored because static destructors are rarely
