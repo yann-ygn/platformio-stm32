@@ -1,16 +1,22 @@
 #ifndef _VVC_MAIN_H
 #define _VVC_MAIN_H
 
-#define BUTTON_PIN     (1)
-// (This should also be a GPIOB pin, but can be from 0-15)
-#define ROTARY_PIN_B   (0)
-// (This should also be a GPIOB pin; pin B3 is the
-//  onboard LED for 'Nucleo-32' boards.)
-#define LED_PIN        (3)
-
 #include <stdint.h>
-#include "stm32f031x6.h"
+#include <stm32f031x6.h>
 
-extern "C" void EXTI0_1_IRQ_handler(void);
+// Define GPIOB pin mappings for our LED and button.
+#define BUTTON_PIN (1)
+#define LED_PIN    (3)
+
+void EXTI0_1_IRQHandler();
+
+// C++ memory regions for initializing statics.
+// ('fini_array' is ignored because static destructors are rarely
+//  important in embedded programs, which never really 'exit'.)
+
+extern void (*_spreinit_array []) (void) __attribute__((weak));
+extern void (*_epreinit_array [])(void) __attribute__((weak));
+extern void (*_sinit_array [])(void) __attribute__((weak));
+extern void (*_einit_array [])(void) __attribute__((weak));
 
 #endif
