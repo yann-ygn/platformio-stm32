@@ -8,14 +8,14 @@ namespace Utils
 {
     namespace
     {
-        uint32_t sysTick = 0;
+        uint32_t sysTickCounter = 0;
         uint32_t clockFrequency = 0;
     }
 
     void setClock();
     void setSysTickTimer();
-    void incrementSysTick();
-    uint32_t getSysTick();
+    void incrementSysTickCounter();
+    uint32_t getSysTickCounter();
 }
 
 #endif

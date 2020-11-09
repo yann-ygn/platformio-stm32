@@ -3,6 +3,7 @@
 
 #include <stdint.h>
 #include <stm32f031x6.h>
+#include "utils.h"
 
 // Port mode register values
 #define GPIO_MODER_INPUT    0x0

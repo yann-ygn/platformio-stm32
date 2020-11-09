@@ -26,12 +26,12 @@ void Utils::setSysTickTimer()
     SysTick->CTRL = (SysTick_CTRL_CLKSOURCE_Msk | SysTick_CTRL_TICKINT_Msk | SysTick_CTRL_ENABLE_Msk);
 }
 
-void Utils::incrementSysTick()
+void Utils::incrementSysTickCounter()
 {
-    sysTick++;
+    sysTickCounter++;
 }
 
-uint32_t Utils::getSysTick()
+uint32_t Utils::getSysTickCounter()
 {
-    return sysTick;
+    return sysTickCounter;
 }
