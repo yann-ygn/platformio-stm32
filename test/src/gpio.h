@@ -33,6 +33,8 @@ enum gpioPinSetting
     pinInputAnalog,
     pinOutputOpenDrain,
     pinOutputPushPull,
+    pinAlternateFunctionPP,
+    pinAlternateFunctionOD,
 };
 
 class Bank
@@ -94,6 +96,15 @@ class Bank
         void setPinSpeed(uint8_t pin, uint8_t ospeed);
 
         /**
+         * @brief Set the Pin AFR register
+         * 
+         * @param pin 
+         * @param af 
+         * 0..7 : AF0-7
+         */
+        void setPinAlternateFunction(uint8_t pin, uint8_t af);
+
+        /**
          * @brief Set the Pin On object
          * 
          * @param pin 
@@ -131,6 +142,7 @@ class Pin
         void setPinState(uint8_t state);
         uint8_t getPinState();
         void togglePinState();
+        void setPinAlternateFunction(uint8_t af);
 };
 
 #endif

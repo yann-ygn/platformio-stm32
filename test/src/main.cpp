@@ -1,26 +1,35 @@
 #include "main.h"
 #include "utils.h"
 #include "hardware.h"
+#include "serial.h"
 #include "gpio.h"
 #include "switch.h"
 #include "led.h"
 
 int main(void) 
 {
-    Utils::setClock();
+    Utils::clockSetup();
     Utils::setSysTickTimer();
 
-    Bank ledBank(GPIOB);
-    ledBank.bankSetup();
+    Bank bankA(GPIOA);
+    bankA.bankSetup();
+    Bank bankB(GPIOB);
+    bankB.bankSetup();
 
-    TemporarySwitch tempSwitch(& ledBank, 1, pinInputPullUp, 500);
+    TemporarySwitch tempSwitch(& bankB, 1, pinInputPullUp, 500);
     tempSwitch.tempSwitchSetup();
 
-    Led led(& ledBank, 3, pinOutputPushPull);
+    Led led(& bankB, 3, pinOutputPushPull);
     led.ledSetup();
-    
+
+    Serial serialPort1(& bankA, 15, 2, pinAlternateFunctionPP, 9600);
+    serialPort1.serialSetup();
+
+    char rxb = '\0';
+
     while (1)
     {
+        /**
         tempSwitch.tempSwitchPoll();
         led.blinkLed(500);
 
@@ -33,5 +42,12 @@ int main(void)
         {
             led.ledSwitchState();
         }
+        **/
+
+        while( !( USART1->ISR & USART_ISR_RXNE ) ) {};
+        rxb = USART1->RDR;
+
+        while( !( USART1->ISR & USART_ISR_TXE ) ) {};
+        USART1->TDR = rxb;
     }
 }

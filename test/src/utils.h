@@ -3,6 +3,7 @@
 
 #include <stdint.h>
 #include <stm32f031x6.h>
+#include "gpio.h"
 
 namespace Utils
 {
@@ -12,10 +13,11 @@ namespace Utils
         uint32_t clockFrequency = 0;
     }
 
-    void setClock();
+    void clockSetup();
     void setSysTickTimer();
     void incrementSysTickCounter();
     uint32_t getSysTickCounter();
+    uint32_t getClockFrequency();
 }
 
 #endif

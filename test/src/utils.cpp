@@ -1,6 +1,6 @@
 #include "utils.h"
 
-void Utils::setClock()
+void Utils::clockSetup()
 {
     FLASH->ACR &= ~(0x17); // Reset the Flash ACR register
     FLASH->ACR |= (FLASH_ACR_LATENCY | FLASH_ACR_PRFTBE); // Set the latency and prefecth buffer bit
@@ -34,4 +34,9 @@ void Utils::incrementSysTickCounter()
 uint32_t Utils::getSysTickCounter()
 {
     return sysTickCounter;
+}
+
+uint32_t Utils::getClockFrequency()
+{
+    return clockFrequency;
 }

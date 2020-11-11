@@ -3,6 +3,18 @@
 
 void Bank::bankSetup()
 {
+    #ifdef GPIOA
+    if (m_bank == GPIOA)
+    {
+        uint32_t bankStatus = RCC->AHBENR & RCC_AHBENR_GPIOAEN; // Get the clock status
+
+        if (bankStatus != 0x20000) // 0x00020000 == enabled
+        {
+            RCC->AHBENR |= RCC_AHBENR_GPIOAEN;
+        }
+    } 
+    #endif
+
     #ifdef GPIOB
     if (m_bank == GPIOB)
     {
@@ -38,6 +50,21 @@ void Bank::setPinSpeed(uint8_t pin, uint8_t ospeed)
 {
     m_bank->OSPEEDR &= ~(0x3 << (pin * 2)); // Reset the register
     m_bank->OSPEEDR |= (ospeed << (pin * 2)); // Set the register
+}
+
+void Bank::setPinAlternateFunction(uint8_t pin, uint8_t af)
+{
+    if (pin < 8)
+    {
+        m_bank->AFR[0] &= ~(0xF << (pin * 4));
+        m_bank->AFR[0] |= (af << (pin * 4));
+    }
+
+    else
+    {
+        m_bank->AFR[1] &= ~(0xF << ((pin - 8) * 4));
+        m_bank->AFR[1] |= (af << ((pin - 8) * 4));
+    }
 }
 
 void Bank::pinOn(uint8_t pin)
@@ -88,6 +115,20 @@ void Pin::pinSetup()
             m_pinBank->setPinPud(m_pin, GPIO_PUPDR_NONE);
             break;
 
+        case pinAlternateFunctionPP:
+            m_pinBank->setPinMode(m_pin, GPIO_MODER_AF);
+            m_pinBank->setPinType(m_pin, GPIO_OTYPER_PP);
+            m_pinBank->setPinSpeed(m_pin, GPIO_OSPEEDR_LOW);
+            m_pinBank->setPinPud(m_pin, GPIO_PUPDR_NONE);
+            break;
+
+        case pinAlternateFunctionOD:
+            m_pinBank->setPinMode(m_pin, GPIO_MODER_AF);
+            m_pinBank->setPinType(m_pin, GPIO_OTYPER_OD);
+            m_pinBank->setPinSpeed(m_pin, GPIO_OSPEEDR_LOW);
+            m_pinBank->setPinPud(m_pin, GPIO_PUPDR_NONE);
+            break;
+
         default:
             break;
     }
@@ -133,4 +174,9 @@ void Pin::togglePinState()
     }
 
     m_pinState = !m_pinState;
+}
+
+void Pin::setPinAlternateFunction(uint8_t af)
+{
+    m_pinBank->setPinAlternateFunction(m_pin, af);
 }
