@@ -43,11 +43,5 @@ int main(void)
             led.ledSwitchState();
         }
         **/
-
-        while( !( USART1->ISR & USART_ISR_RXNE ) ) {};
-        rxb = USART1->RDR;
-
-        while( !( USART1->ISR & USART_ISR_TXE ) ) {};
-        USART1->TDR = rxb;
     }
 }
