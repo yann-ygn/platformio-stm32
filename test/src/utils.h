@@ -20,4 +20,12 @@ namespace Utils
     uint32_t getClockFrequency();
 }
 
+class Logger
+{
+    private:
+
+
+    public:
+
+};
 #endif

@@ -22,8 +22,10 @@ int main(void)
     Led led(& bankB, 3, pinOutputPushPull);
     led.ledSetup();
 
-    Serial serialPort1(& bankA, 15, 2, pinAlternateFunctionPP, 9600);
+    Serial serialPort1(USART1 ,& bankA, 15, 2, pinAlternateFunctionPP, 9600);
     serialPort1.serialSetup();
+
+    RCC->AHBENR |= RCC_AHBENR_DMAEN;
 
     char rxb = '\0';
 
@@ -43,5 +45,11 @@ int main(void)
             led.ledSwitchState();
         }
         **/
+
+        while( !( USART1->ISR & USART_ISR_RXNE ) ) {};
+        rxb = USART1->RDR;
+
+        while( !( USART1->ISR & USART_ISR_TXE ) ) {};
+        USART1->TDR = rxb;
     }
 }

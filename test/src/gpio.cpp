@@ -4,27 +4,27 @@
 void Bank::bankSetup()
 {
     #ifdef GPIOA
-    if (m_bank == GPIOA)
-    {
-        uint32_t bankStatus = RCC->AHBENR & RCC_AHBENR_GPIOAEN; // Get the clock status
-
-        if (bankStatus != 0x20000) // 0x00020000 == enabled
+        if (m_bank == GPIOA)
         {
-            RCC->AHBENR |= RCC_AHBENR_GPIOAEN;
-        }
-    } 
+            uint32_t bankStatus = RCC->AHBENR & RCC_AHBENR_GPIOAEN; // Get the clock status
+
+            if (bankStatus != 0x20000) // 0x00020000 == enabled
+            {
+                RCC->AHBENR |= RCC_AHBENR_GPIOAEN;
+            }
+        } 
     #endif
 
     #ifdef GPIOB
-    if (m_bank == GPIOB)
-    {
-        uint32_t bankStatus = RCC->AHBENR & RCC_AHBENR_GPIOBEN; // Get the clock status
-
-        if (bankStatus != 0x40000) // 0x00040000 == enabled
+        if (m_bank == GPIOB)
         {
-            RCC->AHBENR |= RCC_AHBENR_GPIOBEN;
-        }
-    } 
+            uint32_t bankStatus = RCC->AHBENR & RCC_AHBENR_GPIOBEN; // Get the clock status
+
+            if (bankStatus != 0x40000) // 0x00040000 == enabled
+            {
+                RCC->AHBENR |= RCC_AHBENR_GPIOBEN;
+            }
+        } 
     #endif
 }
 
