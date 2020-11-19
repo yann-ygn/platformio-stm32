@@ -30,20 +30,17 @@ int main(void)
     RCC->AHBENR |= RCC_AHBENR_DMAEN;
     SYSCFG->CFGR1 |= SYSCFG_CFGR1_USART1TX_DMA_RMP;
     DMA1_Channel2->CCR &= ~(DMA_CCR_DIR | DMA_CCR_PL | DMA_CCR_MSIZE | DMA_CCR_PSIZE | DMA_CCR_MINC);
-    DMA1_Channel2->CCR |= (DMA_CCR_DIR | DMA_CCR_PL_1 | DMA_CCR_MSIZE_1 | DMA_CCR_PSIZE_1 | DMA_CCR_MINC);
+    DMA1_Channel2->CCR |= (DMA_CCR_DIR | DMA_CCR_PL_1 | DMA_CCR_MINC);
 
-    const char rxb[] = ""
-    "ab";
-    const size_t size = 20;
+    char test[] = "Blah blah blah !\r\n\0";
+    size_t size = sizeof(test);
 
     USART1->CR3 |= USART_CR3_DMAT;
 
-    DMA1_Channel2->CMAR = (uint32_t)&rxb;
+    DMA1_Channel2->CMAR = (uint32_t)&test;
     DMA1_Channel2->CPAR = (uint32_t)&(USART1->TDR);
     DMA1_Channel2->CNDTR = size;
     DMA1_Channel2->CCR |= DMA_CCR_EN;
-
-    char rxb2 = '\0';
 
     while (1)
     {
