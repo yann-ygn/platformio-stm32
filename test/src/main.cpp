@@ -5,6 +5,7 @@
 #include "gpio.h"
 #include "switch.h"
 #include "led.h"
+#include "dma.h"
 
 #include <stdlib.h>
 
@@ -27,7 +28,9 @@ int main(void)
     Serial serialPort1(USART1, & bankA, 15, 2, pinAlternateFunctionPP, 9600);
     serialPort1.serialSetup();
 
-    RCC->AHBENR |= RCC_AHBENR_DMAEN;
+    DmaChannel dma1Channel5(DMA1_Channel5, DMA1);
+    dma1Channel5.dmaChannelSetup();
+
     SYSCFG->CFGR1 |= SYSCFG_CFGR1_USART1TX_DMA_RMP;
     DMA1_Channel2->CCR &= ~(DMA_CCR_DIR | DMA_CCR_PL | DMA_CCR_MSIZE | DMA_CCR_PSIZE | DMA_CCR_MINC);
     DMA1_Channel2->CCR |= (DMA_CCR_DIR | DMA_CCR_PL_1 | DMA_CCR_MINC);
