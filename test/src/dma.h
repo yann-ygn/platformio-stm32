@@ -9,12 +9,16 @@
 class Dma
 {
     private:
-        DMA_TypeDef* m_dmaPeripheral;
+        DMA_TypeDef* m_dmaController;
 
     public:
-        Dma(DMA_TypeDef* periph) : m_dmaPeripheral(periph) { }
+        Dma(DMA_TypeDef* periph) : m_dmaController(periph) { }
 
         void dmaSetup();
+        uint32_t getTransferStatusRegisters();
+        void clearTransferErrorStatusRegister(uint8_t channel);
+        void clearHalfTransferStatusRegister(uint8_t channel);
+        void clearTransfertCompleteStatusRegister(uint8_t channel);
 };
 
 enum dmaChannelMem2MemSettings
@@ -33,9 +37,9 @@ enum dmaChannelPrioritysettings
 
 enum dmaChannelMemorySizeSettings
 {
-    MemSize8bits,
-    MemSize16Bits,
-    MemSize32Bits,
+    memSize8bits,
+    memSize16Bits,
+    memSize32Bits,
 };
 
 enum dmaChannelPeripheralSizeSettings
@@ -78,22 +82,25 @@ enum dmaChannelTransferCompleteInterruptSettings
 class DmaChannel
 {
     private:
+        Dma m_dmaController;
         DMA_Channel_TypeDef* m_dmaChannel;
-        Dma m_dmaPeripheral;
+        uint8_t m_channel = 0;
 
     public:
-        DmaChannel(DMA_Channel_TypeDef* channel, DMA_TypeDef* periph) : m_dmaChannel(channel), m_dmaPeripheral(periph) { }
+        DmaChannel(DMA_TypeDef* periph, DMA_Channel_TypeDef* channel) : m_dmaController(periph), m_dmaChannel(channel) { }
 
         void dmaChannelSetup();
-        void setDmaChannelSettings(dmaChannelMem2MemSettings = mem2MemDisabled, 
-                                   dmaChannelPrioritysettings = lowPriority,
-                                   dmaChannelMemorySizeSettings = MemSize8bits,
-                                   dmaChannelPeripheralSizeSettings = periphSize8bits,
-                                   dmaChannelMemoryIncreaseModeSettings = memIncDisabled,
-                                   dmaChannelPeripheralIncreaseModeSettings = periphIncDisabled,
-                                   dmaChannelCircularModeSettings = circModeDisabled,
-                                   dmaChannelDirectionSettings = readFromPeripheral,
-                                   dmaChannelTransferCompleteInterruptSettings = transferCompleteIntDisabled);
+        void setDmaChannelSettings(dmaChannelDirectionSettings direction,
+                                   dmaChannelPrioritysettings priority,
+                                   dmaChannelMemorySizeSettings memsize,
+                                   dmaChannelPeripheralSizeSettings periphsize,
+                                   dmaChannelMemoryIncreaseModeSettings meminc,
+                                   dmaChannelTransferCompleteInterruptSettings completeinc,
+                                   dmaChannelPeripheralIncreaseModeSettings periphinc,
+                                   dmaChannelMem2MemSettings mem2mem, 
+                                   dmaChannelCircularModeSettings circmode);
+        bool transferCompleted();
+        void clearTransferRegisters();
 };
 
 #endif
