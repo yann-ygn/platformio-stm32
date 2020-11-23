@@ -2,6 +2,7 @@
 #define UTILS_H
 
 #include <stdint.h>
+#include <stdlib.h>
 #include <stm32f031x6.h>
 #include "gpio.h"
 
@@ -20,16 +21,19 @@ namespace Utils
     uint32_t getClockFrequency();
 }
 
+template<typename T, uint16_t N>
 class CircularBuffer
 {
     private:
-        size_t m_size = 0;
-        size_t m_capacity = 0;
+        static const uint16_t m_size = N + 1;
+        T m_buffer[m_size];
         size_t m_read = 0;
         size_t m_write = 0;
 
     public:
-        CircularBuffer(size_t size) : m_size(size) {} }
+        CircularBuffer(size_t size) {}
+        void read(T& item);
+        T read();
 };
 
 class Logger

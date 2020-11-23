@@ -36,7 +36,7 @@ void Serial::enableDmaTx(DMA_TypeDef* periph, DMA_Channel_TypeDef* channel)
     m_dmaTxChannel->setDmaChannelSettings(readFromMemory, lowPriority, memSize8bits, periphSize8bits, memIncEnabled, transferCompleteIntDisabled, periphIncDisabled, mem2MemDisabled, circModeDisabled);
 }
 
-void Serial::print(char* str)
+void Serial::print(const char* str)
 {
     if (m_dmaTxChannel->transferCompleted())
     {

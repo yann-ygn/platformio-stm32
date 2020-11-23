@@ -3,7 +3,6 @@
 
 #include <stdint.h>
 #include <stdlib.h>
-#include <stdarg.h>
 #include <stm32f031x6.h>
 #include "utils.h"
 #include "dma.h"
@@ -22,7 +21,7 @@ class Serial
 
         void serialSetup();
         void enableDmaTx(DMA_TypeDef* periph, DMA_Channel_TypeDef* channel);
-        void print(char* str);
+        void print(const char* str);
 };
 
 #endif
