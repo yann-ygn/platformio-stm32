@@ -21,27 +21,55 @@ namespace Utils
     uint32_t getClockFrequency();
 }
 
-template<typename T, uint16_t N>
 class CircularBuffer
 {
     private:
-        static const uint16_t m_size = N + 1;
-        T m_buffer[m_size];
+        size_t m_size = 5;
+        uint8_t m_buffer[5] = { 0 };
         size_t m_read = 0;
         size_t m_write = 0;
 
+        void advance(size_t& value)
+        {
+            value = (value + 1) % m_size;
+        }
+
     public:
-        CircularBuffer(size_t size) {}
-        void read(T& item);
-        T read();
+        CircularBuffer() {}
+
+        void write(uint8_t item)
+        {
+            m_buffer[m_write] = item;
+            advance(m_write);
+            if (isEmpty())
+            {
+                advance(m_read);
+            }
+        }
+
+        uint8_t read()
+        {
+            if (! isEmpty())
+            {
+                size_t oldRead = m_read;
+                advance(m_read);
+                return m_buffer[oldRead];
+            }
+        }
+
+        bool isEmpty()
+        {
+            return (m_read == m_write);
+        }
 };
 
 class Logger
 {
     private:
-
+        void startDmaTx();
 
     public:
+        void logByte(uint8_t byte);
 
 };
 #endif

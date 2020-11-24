@@ -47,6 +47,6 @@ void Serial::print(const char* str)
 
     DMA1_Channel2->CMAR = (uint32_t)str;
     DMA1_Channel2->CPAR = (uint32_t)&(USART1->TDR);
-    DMA1_Channel2->CNDTR = 19;
+    DMA1_Channel2->CNDTR = 1;
     DMA1_Channel2->CCR |= DMA_CCR_EN;
 }
