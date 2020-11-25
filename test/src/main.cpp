@@ -6,46 +6,7 @@
 #include "switch.h"
 #include "led.h"
 #include "dma.h"
-
-#include <stdlib.h>
-#include <stdarg.h>
-
-size_t m_size = 5;
-char m_buffer[5] = { 0 };
-size_t m_read = 0;
-size_t m_write = 0;
-
-bool isEmpty()
-{
-    return (m_read == m_write);
-}
-
-void advance(size_t& value)
-{
-    value = (value + 1) % m_size;
-}
-
-void write(uint8_t item)
-{
-    m_buffer[m_write] = item;
-    advance(m_write);
-    if (isEmpty())
-    {
-        advance(m_read);
-    }
-}
-
-char read()
-{
-    if (! isEmpty())
-    {
-        size_t oldRead = m_read;
-        advance(m_read);
-        return m_buffer[oldRead];
-    }
-}
-
-
+#include "buffer.h"
 
 int main(void) 
 {
@@ -67,20 +28,11 @@ int main(void)
     serialPort1.serialSetup();
     serialPort1.enableDmaTx(DMA1, DMA1_Channel2);
 
+    CircularBuffer buffer(15);
     char test1 = 'a';
-    char test2 = 'b';
-    char test3 = 'c';
-    char test4 = 'd';
-    write(test1);
-    write(test2);
-    write(test3);
-    write(test4);
-
-    for (uint8_t i = 0; i < 7; i++)
-    {
-        char testout = read();
-        serialPort1.print(&testout);
-    }    
+    buffer.write(test1);
+    char test2 = buffer.read();
+    serialPort1.print(&test2);
 
     while (1)
     {

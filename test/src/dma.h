@@ -1,7 +1,7 @@
 #ifndef DMA_H
 #define DMA_H
 
-#include <stdint.h>
+#include <cstdint>
 #include <stm32f031x6.h>
 #include "utils.h"
 

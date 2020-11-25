@@ -1,8 +1,7 @@
 #ifndef SERIAL_H
 #define SERIAL_H
 
-#include <stdint.h>
-#include <stdlib.h>
+#include <cstdint>
 #include <stm32f031x6.h>
 #include "utils.h"
 #include "dma.h"

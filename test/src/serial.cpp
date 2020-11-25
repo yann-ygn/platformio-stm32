@@ -43,8 +43,6 @@ void Serial::print(const char* str)
         m_dmaTxChannel->clearTransferRegisters();
     }
 
-    size_t size = sizeof(str);
-
     DMA1_Channel2->CMAR = (uint32_t)str;
     DMA1_Channel2->CPAR = (uint32_t)&(USART1->TDR);
     DMA1_Channel2->CNDTR = 1;
