@@ -237,3 +237,22 @@ void DmaChannel::clearTransferRegisters()
     m_dmaController.clearTransfertCompleteStatusRegister(m_channel);
     m_dmaChannel->CCR &= ~(DMA_CCR_EN);
 }
+
+void DmaChannel::dmaInterruptEnable(uint32_t priority)
+{
+    if (m_dmaChannel == DMA1_Channel1)
+    {
+        NVIC_SetPriority(DMA1_Channel1_IRQn, priority);
+        NVIC_EnableIRQ(DMA1_Channel1_IRQn);
+    }
+    else if (m_dmaChannel == DMA1_Channel2 || m_dmaChannel == DMA1_Channel3)
+    {
+        NVIC_SetPriority(DMA1_Channel2_3_IRQn, priority);
+        NVIC_EnableIRQ(DMA1_Channel2_3_IRQn);
+    }
+    else if (m_dmaChannel == DMA1_Channel4 || m_dmaChannel == DMA1_Channel5)
+    {
+        NVIC_SetPriority(DMA1_Channel2_3_IRQn, priority);
+        NVIC_EnableIRQ(DMA1_Channel2_3_IRQn);
+    }
+}

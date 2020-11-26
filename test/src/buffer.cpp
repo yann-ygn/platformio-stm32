@@ -29,3 +29,19 @@ bool CircularBuffer::isEmpty()
 {
     return (m_read == m_write);
 }
+
+void CircularBuffer::writeString(const char* str, size_t len)
+{
+    for (uint8_t i = 0; i < len; i++)
+    {
+        write(str[i]);
+    }
+}
+
+void CircularBuffer::readString(char* data, size_t len)
+{
+    for (uint8_t i = 0; i < len; i++)
+    {
+        data[i] = read();
+    }
+}

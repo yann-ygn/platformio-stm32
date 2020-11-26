@@ -101,6 +101,7 @@ class DmaChannel
                                    dmaChannelCircularModeSettings circmode);
         bool transferCompleted();
         void clearTransferRegisters();
+        void dmaInterruptEnable(uint32_t priority);
 };
 
 #endif

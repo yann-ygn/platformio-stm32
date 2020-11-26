@@ -7,6 +7,7 @@
 #include "led.h"
 #include "dma.h"
 #include "buffer.h"
+#include "log.h"
 
 int main(void) 
 {
@@ -28,11 +29,13 @@ int main(void)
     serialPort1.serialSetup();
     serialPort1.enableDmaTx(DMA1, DMA1_Channel2);
 
-    CircularBuffer buffer(15);
-    char test1 = 'a';
-    buffer.write(test1);
-    char test2 = buffer.read();
-    serialPort1.print(&test2);
+    Logger log(& serialPort1, 63);
+
+    CircularBuffer buffer(7);
+    buffer.writeString("abcdef", 6);
+    char data[6] = {};
+    buffer.readString(data, 6);
+    serialPort1.startDmaTx(&data, 6);
 
     while (1)
     {
@@ -41,7 +44,7 @@ int main(void)
 
         if (tempSwitch.tempSwitchPushed())
         {
-            serialPort1.print("Test test test !\r\n\0");
+            log.log("zert");
         }
 
         if (tempSwitch.tempSwitchLongPress())
