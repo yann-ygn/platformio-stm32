@@ -31,11 +31,7 @@ int main(void)
 
     Logger log(& serialPort1, 63);
 
-    CircularBuffer buffer(7);
-    buffer.writeString("abcdef", 6);
-    char data[6] = {};
-    buffer.readString(data, 6);
-    serialPort1.startDmaTx(&data, 6);
+    CircularBuffer buffer(8);
 
     while (1)
     {

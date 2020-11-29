@@ -3,6 +3,7 @@
 
 #include <cstdint>
 #include <cstdlib>
+#include <cstring>
 #include <stm32f031x6.h>
 
 class CircularBuffer
@@ -13,18 +14,16 @@ class CircularBuffer
         size_t m_read = 0;
         size_t m_write = 0;
 
-        void advance(size_t& value);
+        size_t getMin(size_t x, size_t y);
+        size_t getMax(size_t x, size_t y);
 
     public:
         CircularBuffer(size_t size) : m_size(size) { m_buffer = new char[m_size]; }
 
-        void write(char item);
-        void writeString(const char* str, size_t len);
-
-        char read();
-        void readString(char* data, size_t len);
-
-        bool isEmpty();
+        size_t getFree();
+        size_t getAvailable();
+        void write(char* data, size_t len);
+        void read(char* data, size_t len);
 };
 
 #endif
