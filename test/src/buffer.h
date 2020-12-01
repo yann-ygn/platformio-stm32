@@ -22,7 +22,7 @@ class CircularBuffer
 
         size_t getFree();
         size_t getAvailable();
-        void write(char* data, size_t len);
+        void write(const char* data, size_t len);
         void read(char* data, size_t len);
 };
 

@@ -68,7 +68,7 @@ size_t CircularBuffer::getAvailable()
     return size;
 }
 
-void CircularBuffer::write(char* data, size_t len)
+void CircularBuffer::write(const char* data, size_t len)
 {
     size_t free = getFree();
     len = getMin(free, len);

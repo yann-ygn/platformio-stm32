@@ -29,9 +29,8 @@ int main(void)
     serialPort1.serialSetup();
     serialPort1.enableDmaTx(DMA1, DMA1_Channel2);
 
-    Logger log(& serialPort1, 63);
-
-    CircularBuffer buffer(8);
+    Logger log(& serialPort1, 8);
+    log.log("zert");
 
     while (1)
     {
