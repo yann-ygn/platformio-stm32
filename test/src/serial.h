@@ -23,7 +23,7 @@ class Serial
         void serialSetup();
         void enableDmaTx(DMA_TypeDef* periph, DMA_Channel_TypeDef* channel);
         void print(const char* str, size_t len);
-        void startDmaTx(char address, size_t length);
+        void startDmaTx(char* address, size_t length);
 };
 
 #endif

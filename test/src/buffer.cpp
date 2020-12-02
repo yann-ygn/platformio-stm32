@@ -113,3 +113,43 @@ void CircularBuffer::read(char* data, size_t len)
         m_read = 0;
     }
 }
+
+char* CircularBuffer::getReadAddress()
+{
+    return &m_buffer[m_read];
+}
+
+void CircularBuffer::setReadAddress(size_t len)
+{
+    size_t available = getAvailable();
+
+    len = getMin(len, available);
+    m_read += len;
+
+    if (m_read >= m_size)
+    {
+        m_read -= m_size;
+    }
+}
+
+size_t CircularBuffer::getReadLength()
+{
+    size_t len = 0;
+    size_t r = m_read;
+    size_t w = m_write;
+
+    if (w > r)
+    {
+        len = w - r;
+    }
+    else if (r > w)
+    {
+        len = m_size - r;
+    }
+    else
+    {
+        len = 0;
+    }
+
+    return len;
+}

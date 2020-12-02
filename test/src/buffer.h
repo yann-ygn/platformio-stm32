@@ -24,6 +24,9 @@ class CircularBuffer
         size_t getAvailable();
         void write(const char* data, size_t len);
         void read(char* data, size_t len);
+        char* getReadAddress();
+        void setReadAddress(size_t len);
+        size_t getReadLength();
 };
 
 #endif

@@ -3,8 +3,9 @@
 void Logger::log(const char* str)
 {
     size_t len = strlen(str);
-    m_buffer.write("zert", 4);
-    char dataout[4];
-    m_buffer.read(dataout, 4);
-    m_serialPort->print(dataout, 4);
+    m_buffer.write(str, len);
+    char* address = m_buffer.getReadAddress();
+    size_t len2 = m_buffer.getReadLength();
+    m_serialPort->startDmaTx(address, len2);
+    m_buffer.setReadAddress(len2);
 }

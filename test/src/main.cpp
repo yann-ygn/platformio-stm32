@@ -29,8 +29,9 @@ int main(void)
     serialPort1.serialSetup();
     serialPort1.enableDmaTx(DMA1, DMA1_Channel2);
 
-    Logger log(& serialPort1, 8);
-    log.log("zert");
+    CircularBuffer buffer(16);
+    Logger log(&serialPort1, 16);
+    log.log("poiuy");
 
     while (1)
     {
@@ -39,12 +40,12 @@ int main(void)
 
         if (tempSwitch.tempSwitchPushed())
         {
-            log.log("zert");
+            log.log("abc");
         }
 
         if (tempSwitch.tempSwitchLongPress())
         {
-            led.ledSwitchState();
+            log.log("def");
         }
     }
 }
