@@ -7,4 +7,6 @@
 
 extern "C" void SysTick_Handler(void); // millis() type ISR method
 
+extern "C" void DMA1_Channel2_3_IRQHandler(void);
+
 #endif

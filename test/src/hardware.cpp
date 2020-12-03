@@ -6,4 +6,10 @@ extern "C"
     {
         Utils::incrementSysTickCounter();
     }
+
+    void DMA1_Channel2_3_IRQHandler(void)
+    {
+        
+    }
 }
+

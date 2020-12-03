@@ -1,6 +1,4 @@
-#include "main.h"
 #include "utils.h"
-#include "hardware.h"
 #include "serial.h"
 #include "gpio.h"
 #include "switch.h"
@@ -8,6 +6,8 @@
 #include "dma.h"
 #include "buffer.h"
 #include "log.h"
+
+Logger log2();
 
 int main(void) 
 {
@@ -29,7 +29,6 @@ int main(void)
     serialPort1.serialSetup();
     serialPort1.enableDmaTx(DMA1, DMA1_Channel2);
 
-    CircularBuffer buffer(16);
     Logger log(&serialPort1, 16);
     log.log("poiuy");
 
@@ -40,12 +39,12 @@ int main(void)
 
         if (tempSwitch.tempSwitchPushed())
         {
-            log.log("abc");
+            //log.log("abc");
         }
 
         if (tempSwitch.tempSwitchLongPress())
         {
-            log.log("def");
+            //log.log("def");
         }
     }
 }
