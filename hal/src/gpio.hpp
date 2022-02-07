@@ -27,8 +27,8 @@ namespace hal {
     /**
      * @brief Construct a valid Pin object
      *
-     * @param pt Port name
-     * @param pn Pin number
+     * @param t_port Port name
+     * @param t_pin Pin number
      */
     constexpr Pin(const GpioPort t_port, const uint8_t t_pin) : port(t_port), pin(t_pin) {}
 
@@ -99,11 +99,13 @@ namespace hal {
       Config() : pin(), mode(Mode::modeInput), pull(Pull::pullNoPull), speed(Speed::speedLow) {}
     };
 
-    void init(Config &t_cfg);
+    Gpio();
 
-    void init(Pin t_pin, Config &t_cfg);
+    void setupGpio(Config &t_cfg);
 
-    void init(Pin t_pin, Mode t_mode = Mode::modeInput,
+    void setupGpio(Pin t_pin, Config &t_cfg);
+
+    void setupGpio(Pin t_pin, Mode t_mode = Mode::modeInput,
               Pull t_pull = Pull::pullNoPull,
               Speed t_speed = Speed::speedLow);
 
@@ -111,8 +113,14 @@ namespace hal {
     Config m_cfg;
     GPIO_TypeDef *m_portAddress = nullptr;
 
-    GPIO_TypeDef *GetGPIOPortAddress();
+    GPIO_TypeDef *getBasePortAddress();
+
+    void setupGpioModeRegister();
+    void setupGpioPullRegister();
+    void setupGpioSpeedRegister();
+    void setupGpioOutputTypeRegister();
+    void setupGpioPortRegister();
   };
-}
+} // namespace hal
 
 #endif  // HAL_GPIO_H_
