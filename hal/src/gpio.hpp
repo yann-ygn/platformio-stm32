@@ -10,11 +10,11 @@ namespace hal {
    * @brief GPIO port names
    */
   enum class GpioPort {
-    kPortA,
-    kPortB,
-    kPortC,
-    kPortD,
-    kPortX,
+    gpioPortA,
+    gpioPortB,
+    gpioPortC,
+    gpioPortD,
+    gpioPortX,
   };
 
   /**
@@ -30,19 +30,19 @@ namespace hal {
      * @param pt Port name
      * @param pn Pin number
      */
-    constexpr Pin(const GpioPort pt, const uint8_t pn) : port(pt), pin(pn) {}
+    constexpr Pin(const GpioPort t_port, const uint8_t t_pin) : port(t_port), pin(t_pin) {}
 
     /**
      * @brief Construct an invalid Pin object
      */
-    constexpr Pin() : port(GpioPort::kPortX), pin(255) {}
+    constexpr Pin() : port(GpioPort::gpioPortX), pin(255) {}
 
     /**
      * @brief Checks for the validity of a pin
      *
      * @return true if the pin is a combination of a valid port/pin
      */
-    constexpr bool isValid() const { return port != GpioPort::kPortX && pin < 16; }
+    constexpr bool isValid() const { return port != GpioPort::gpioPortX && pin < 16; }
   };
 
   class Gpio {
@@ -51,37 +51,37 @@ namespace hal {
      * @brief Mode of operation of the GPIO
      */
     enum class Mode {
-      kInput = 0x0,              // Input
-      kOutput = 0x1,             // Output PP
-      kOutputOd = 0x1,           // Output OD
-      kAlternateFunction = 0x2,  // Alternate function
-      kAnalog = 0x3,             // Analog
+      modeInput = 0x0,              // Input
+      modeOutput = 0x1,             // Output PP
+      modeOutputOd = 0x1,           // Output OD
+      modeAlternateFunction = 0x2,  // Alternate function
+      modeAnalog = 0x3,             // Analog
     };
 
     /**
      * @brief State of the internal pull up/down resistor
      */
     enum class Pull {
-      kNoPull = 0x0,
-      kPullUp = 0x1,
-      kPullDown = 0x2,
+      pullNoPull = 0x0,
+      pullPullUp = 0x1,
+      pullPullDown = 0x2,
     };
 
     /**
      * @brief Output speed of the GPIO
      */
     enum class Speed {
-      kLow = 0x0,
-      kMed = 0x1,
-      kHigh = 0x2,
+      speedLow = 0x0,
+      speedMed = 0x1,
+      speedHigh = 0x2,
     };
 
     /**
      * @brief Output type of the GPIO
      */
     enum class OutputType {
-      kPp = 0x0,
-      kOd = 0x1,
+      outputTypePp = 0x0,
+      outputTypeOd = 0x1,
     };
 
     /**
@@ -96,18 +96,20 @@ namespace hal {
       /**
        * @brief Constructor with no arguments defines an invalid pin set to input with no pullup
        */
-      Config() : pin(), mode(Mode::kInput), pull(Pull::kNoPull), speed(Speed::kLow) {}
+      Config() : pin(), mode(Mode::modeInput), pull(Pull::pullNoPull), speed(Speed::speedLow) {}
     };
 
-    void init(Config &cfg);
+    void init(Config &t_cfg);
 
-    void init(Pin p, Config &cfg);
+    void init(Pin t_pin, Config &t_cfg);
 
-    void init(Pin p, Mode m = Mode::kInput, Pull pu = Pull::kNoPull, Speed sp = Speed::kLow);
+    void init(Pin t_pin, Mode t_mode = Mode::modeInput,
+              Pull t_pull = Pull::pullNoPull,
+              Speed t_speed = Speed::speedLow);
 
    private:
-    Config cfg_;
-    GPIO_TypeDef *port_address_ = nullptr;
+    Config m_cfg;
+    GPIO_TypeDef *m_portAddress = nullptr;
 
     GPIO_TypeDef *GetGPIOPortAddress();
   };
