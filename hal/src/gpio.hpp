@@ -13,7 +13,7 @@ namespace hal {
     gpioPortA,
     gpioPortB,
     gpioPortC,
-    gpioPortD,
+    gpioPortF,
     gpioPortX,
   };
 
@@ -50,10 +50,9 @@ namespace hal {
     /**
      * @brief Mode of operation of the GPIO
      */
-    enum class Mode {
+    enum class Mode: uint8_t {
       modeInput = 0x0,              // Input
       modeOutput = 0x1,             // Output PP
-      modeOutputOd = 0x1,           // Output OD
       modeAlternateFunction = 0x2,  // Alternate function
       modeAnalog = 0x3,             // Analog
     };
@@ -61,7 +60,7 @@ namespace hal {
     /**
      * @brief State of the internal pull up/down resistor
      */
-    enum class Pull {
+    enum class Pull: uint8_t {
       pullNoPull = 0x0,
       pullPullUp = 0x1,
       pullPullDown = 0x2,
@@ -70,7 +69,7 @@ namespace hal {
     /**
      * @brief Output speed of the GPIO
      */
-    enum class Speed {
+    enum class Speed: uint8_t {
       speedLow = 0x0,
       speedMed = 0x1,
       speedHigh = 0x2,
@@ -79,7 +78,7 @@ namespace hal {
     /**
      * @brief Output type of the GPIO
      */
-    enum class OutputType {
+    enum class OutputType: uint8_t {
       outputTypePp = 0x0,
       outputTypeOd = 0x1,
     };
@@ -92,30 +91,46 @@ namespace hal {
       Mode mode;
       Pull pull;
       Speed speed;
+      OutputType otype;
 
       /**
        * @brief Constructor with no arguments defines an invalid pin set to input with no pullup
        */
-      Config() : pin(), mode(Mode::modeInput), pull(Pull::pullNoPull), speed(Speed::speedLow) {}
+      Config() : pin(), mode(Mode::modeInput), pull(Pull::pullNoPull), speed(Speed::speedLow), otype(OutputType::outputTypeOd) {}
     };
 
     Gpio();
 
-    void setupGpio(Config &t_cfg);
+    void setupGpio();
 
     void setupGpio(Pin t_pin, Config &t_cfg);
 
     void setupGpio(Pin t_pin, Mode t_mode = Mode::modeInput,
               Pull t_pull = Pull::pullNoPull,
-              Speed t_speed = Speed::speedLow);
+              Speed t_speed = Speed::speedLow,
+              OutputType t_otype = OutputType::outputTypeOd);
 
    private:
     Config m_cfg;
+
+    /**
+     * @brief Low level address of the GPIO bank
+     */
     GPIO_TypeDef *m_portAddress = nullptr;
 
-    GPIO_TypeDef *getBasePortAddress();
+    /**
+     * @brief Sets the port address member to the low level CMSIS GPIO bank address
+     */
+    void getBasePortAddress();
 
+    /**
+     * @brief Set the GPIO MODER register
+     */
     void setupGpioModeRegister();
+
+    /**
+     * @brief Set the GPIO PUPDR register
+     */
     void setupGpioPullRegister();
     void setupGpioSpeedRegister();
     void setupGpioOutputTypeRegister();
