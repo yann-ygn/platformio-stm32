@@ -73,6 +73,55 @@ void Gpio::setupGpioModeRegister()
     //         0x2 = Alternate function
     //         0x3 = Analog
     // adress : pin number * 2 because each pin uses two bits
-    m_portAddress->MODER &= ~(0x3 << (m_cfg.pin.pin * 2));
-    m_portAddress->MODER |= (uint8_t(m_cfg.mode) << (m_cfg.pin.pin * 2));
+    m_portAddress->MODER &= ~(0x3 << (m_cfg.pin.pin * 2)); // Reset
+    m_portAddress->MODER |= (uint8_t(m_cfg.mode) << (m_cfg.pin.pin * 2)); // Set
+}
+
+void Gpio::setupGpioPullRegister()
+{
+    // value << address
+    // value : ~(0x3) = 00b clear the register
+    //         0x0 = No pull up/down
+    //         0x1 = Pull up
+    //         0x2 = Pull down
+    //         0x3 = Reserved
+    // adress : pin number * 2 because each pin uses two bits
+    m_portAddress->PUPDR &= ~(0x3 << (m_cfg.pin.pin * 2)); // Reset
+    m_portAddress->PUPDR |= (uint8_t(m_cfg.pull) << (m_cfg.pin.pin * 2)); // Set
+}
+
+void Gpio::setupGpioSpeedRegister()
+{
+    // value << address
+    // value : ~(0x3) = 00b clear the register
+    //         0x0 = Low speed
+    //         0x1 = Medium speed
+    //         0x3 = High speed
+    // adress : pin number * 2 because each pin uses two bits
+    m_portAddress->OSPEEDR &= ~(0x3 << (m_cfg.pin.pin * 2)); // Reset
+    m_portAddress->OSPEEDR |= (uint8_t(m_cfg.speed) << (m_cfg.pin.pin * 2)); // Set
+}
+
+void Gpio::setupGpioOutputTypeRegister()
+{
+    // value << address
+    // value : ~(0x1) = 0b clear the register
+    //         0x0 = Push pull
+    //         0x1 = Open drain
+    // adress : pin number * 1 because each pin uses one bit
+    m_portAddress->OTYPER &= ~(0x1 << m_cfg.pin.pin); // Reset
+    m_portAddress->OTYPER |= (uint8_t(m_cfg.otype) << m_cfg.pin.pin); // Set
+}
+
+void Gpio::setupGpioPortRegister()
+{
+    #ifdef GPIOA
+        if (m_portAddress == GPIOA)
+        {
+            if ((RCC->AHBENR & RCC_AHBENR_GPIOAEN) != 0x20000) // 0x00020000 == enabled
+            {
+                RCC->AHBENR |= RCC_AHBENR_GPIOAEN;
+            }
+        }
+    #endif
 }

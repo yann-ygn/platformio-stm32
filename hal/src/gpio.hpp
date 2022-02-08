@@ -119,21 +119,33 @@ namespace hal {
     GPIO_TypeDef *m_portAddress = nullptr;
 
     /**
-     * @brief Sets the port address member to the low level CMSIS GPIO bank address
+     * @brief Sets port address pointer according to the config pin object and the CMSIS header value
      */
     void getBasePortAddress();
 
     /**
-     * @brief Set the GPIO MODER register
+     * @brief Set the GPIO MODER register according to the config pin object and mode value
      */
     void setupGpioModeRegister();
 
     /**
-     * @brief Set the GPIO PUPDR register
+     * @brief Set the GPIO PUPDR register according to the config pin object and pull value
      */
     void setupGpioPullRegister();
+
+    /**
+     * @brief Set the GPIO SPEEDR register according to the config pin object and speed value
+     */
     void setupGpioSpeedRegister();
+
+    /**
+     * @brief Set the GPIO OTYPER register according to the config pin object and otype value
+     */
     void setupGpioOutputTypeRegister();
+
+    /**
+     * @brief Set the RCC_AHBENR register for the corresponding port according to the pin object
+     */
     void setupGpioPortRegister();
   };
 } // namespace hal
