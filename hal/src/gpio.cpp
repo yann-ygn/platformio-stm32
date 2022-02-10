@@ -8,12 +8,12 @@ void Gpio::setupGpio() {
 
     switch (m_cfg.mode)
     {
-        case Mode::modeInput: {
+        case Config::Mode::modeInput: {
             setupGpioModeRegister();
             setupGpioPullRegister();
             break;
         }
-        case Mode::modeOutput: {
+        case Config::Mode::modeOutput: {
             setupGpioModeRegister();
             setupGpioOutputTypeRegister();
             setupGpioSpeedRegister();
@@ -38,7 +38,10 @@ void Gpio::setupGpio(Pin t_pin, Config &t_cfg) {
     }
 }
 
-void Gpio::setupGpio(Pin t_pin, Mode t_mode, Pull t_pull, Speed t_speed, OutputType t_otype) {
+void Gpio::setupGpio(Pin t_pin, Config::Mode t_mode,
+                    Config::Pull t_pull,
+                    Config::Speed t_speed,
+                    Config::OutputType t_otype) {
     // Populate the config object
     m_cfg.pin = t_pin;
     m_cfg.mode = t_mode;
