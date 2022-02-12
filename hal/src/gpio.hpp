@@ -113,9 +113,7 @@ namespace hal {
     private:
       Config m_cfg;
 
-      /**
-       * @brief Low level address of the GPIO bank
-       */
+      // Low level address of the GPIO bank
       GPIO_TypeDef *m_portAddress = nullptr;
 
       /**
@@ -126,27 +124,27 @@ namespace hal {
       /**
        * @brief Set the GPIO MODER register according to the config pin object and mode value
        */
-      void setupGpioModeRegister();
+      void setupGpioModeRegister() const;
 
       /**
        * @brief Set the GPIO PUPDR register according to the config pin object and pull value
        */
-      void setupGpioPullRegister();
+      void setupGpioPullRegister() const;
 
       /**
        * @brief Set the GPIO SPEEDR register according to the config pin object and speed value
        */
-      void setupGpioSpeedRegister();
+      void setupGpioSpeedRegister() const;
 
       /**
        * @brief Set the GPIO OTYPER register according to the config pin object and otype value
        */
-      void setupGpioOutputTypeRegister();
+      void setupGpioOutputTypeRegister() const;
 
       /**
        * @brief Set the RCC_AHBENR register for the corresponding port according to the pin object
        */
-      void setupGpioPortRegister();
+      void setupGpioPortRegister() const;
   };
 } // namespace hal
 

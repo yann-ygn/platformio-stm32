@@ -2,7 +2,7 @@
 #define GPIO_H
 
 #include <stdint.h>
-#include <stm32f031x6.h>
+#include <stm32f031wx6.h>
 #include "utils.h"
 
 // Port mode register values
