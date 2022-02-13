@@ -106,15 +106,33 @@ namespace hal {
       void setupGpio(Pin t_pin, Config &t_cfg);
 
       void setupGpio(Pin t_pin, Config::Mode t_mode = Config::Mode::modeInput,
-                Config::Pull t_pull = Config::Pull::pullNoPull,
-                Config::Speed t_speed = Config::Speed::speedLow,
-                Config::OutputType t_otype = Config::OutputType::outputTypeOd);
+                    Config::Pull t_pull = Config::Pull::pullNoPull,
+                    Config::Speed t_speed = Config::Speed::speedLow,
+                    Config::OutputType t_otype = Config::OutputType::outputTypeOd);
+
+      /**
+       * @brief 
+       *
+       * @param state 1 : on | 0 : off
+       */
+      void writeGpioState(uint8_t state);
+
+      uint8_t readGpioState();
 
     private:
       Config m_cfg;
 
       // Low level address of the GPIO bank
       GPIO_TypeDef *m_portAddress = nullptr;
+
+      /**
+       * @brief Set the bit set/reset register to turn the gpio high/low
+       *
+       * @param t_value 1 : on | 0 : off
+       */
+      void setGpioBssrRegister(uint8_t t_value) const;
+
+      uint8_t
 
       /**
        * @brief Sets port address pointer according to the config pin object and the CMSIS header value

@@ -1,7 +1,13 @@
-#include "system.hpp"
-#include "gpio.hpp"
+#include "hardware.hpp"
 
-int main(void) {
-    hal::System hardware;
-    hardware.setupSytem();
+hardware::Hardware board;
+
+int main() {
+  board.setupHardware();
+
+  while (1) {
+
+  }
+
+  return 0;
 }
