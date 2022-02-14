@@ -111,13 +111,33 @@ namespace hal {
                     Config::OutputType t_otype = Config::OutputType::outputTypeOd);
 
       /**
-       * @brief 
+       * @brief Set the pin state
        *
-       * @param state 1 : on | 0 : off
+       * @param state 1 : high | 0 : low
        */
-      void writeGpioState(uint8_t state);
+      void setGpioState(uint8_t state) const;
 
-      uint8_t readGpioState();
+      /**
+       * @brief Set the GPIO high
+       */
+      void setGpioStateOn() const;
+
+      /**
+       * @brief Set the Gpio low
+       */
+      void setGpioStateOff() const;
+
+      /**
+       * @brief Toggle the Gpio state
+       */
+      void toggleGpioState() const;
+
+      /**
+       * @brief Get the gpio state
+       *
+       * @return uint8_t 1 : high | 0 : low
+       */
+      uint8_t getGpioState() const;
 
     private:
       Config m_cfg;
@@ -132,7 +152,12 @@ namespace hal {
        */
       void setGpioBssrRegister(uint8_t t_value) const;
 
-      uint8_t
+      /**
+       * @brief Read the IDR register
+       *
+       * @return uint8_t 
+       */
+      uint8_t getGpioIdrRegister() const;
 
       /**
        * @brief Sets port address pointer according to the config pin object and the CMSIS header value
