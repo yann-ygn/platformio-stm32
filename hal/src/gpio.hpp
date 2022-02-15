@@ -155,7 +155,7 @@ namespace hal {
       /**
        * @brief Read the IDR register
        *
-       * @return uint8_t 
+       * @return uint8_t Register value
        */
       uint8_t getGpioIdrRegister() const;
 

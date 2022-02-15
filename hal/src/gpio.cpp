@@ -66,6 +66,21 @@ void Gpio::getBasePortAddress() {
   }
 }
 
+void Gpio::setGpioBssrRegister(uint8_t t_value) const {
+
+}
+
+uint8_t Gpio::getGpioIdrRegister() const {
+  // value << address
+  // value : 0x1 High
+  if ((m_portAddress->IDR & (0x1 << m_cfg.pin.pin)) == (0x1 << m_cfg.pin.pin)) {
+    return 1;
+  // value : 0x0 Low
+  } else {
+    return 0;
+  }
+}
+
 void Gpio::setupGpioModeRegister() const {
   // value << address
   // value : ~(0x3) = 00b clear the register
