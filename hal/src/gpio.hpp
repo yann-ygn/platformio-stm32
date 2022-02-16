@@ -115,7 +115,7 @@ namespace hal {
        *
        * @param state 1 : high | 0 : low
        */
-      void setGpioState(uint8_t state) const;
+      void setGpioState(uint8_t t_state) const;
 
       /**
        * @brief Set the GPIO high

@@ -56,6 +56,26 @@ void Gpio::setupGpio(Pin t_pin, Config::Mode t_mode,
   }
 }
 
+void Gpio::setGpioState(uint8_t t_state) const {
+
+}
+
+void Gpio::setGpioStateOn() const {
+
+}
+
+void Gpio::setGpioStateOff() const {
+
+}
+
+void Gpio::toggleGpioState() const {
+
+}
+
+uint8_t Gpio::getGpioState() const {
+
+}
+
 void Gpio::getBasePortAddress() {
   switch (m_cfg.pin.port) {
     case GpioPort::gpioPortA: m_portAddress = GPIOA; break;
@@ -67,7 +87,26 @@ void Gpio::getBasePortAddress() {
 }
 
 void Gpio::setGpioBssrRegister(uint8_t t_value) const {
+  // value << address
+  switch (t_value)
+  {
+    // 1 << pin
+    // Set pin ON
+    case 1: {
+      m_portAddress->BSRR = (1 << uint8_t(m_cfg.pin.pin));
+      break;
+    }
 
+    // 1 << (pin + 16)
+    // Set pin OFF
+    case 0: {
+      m_portAddress->BSRR = (1 << (uint8_t(m_cfg.pin.pin) + 16));
+      break;
+    }
+
+    default:
+      break;
+  }
 }
 
 uint8_t Gpio::getGpioIdrRegister() const {
