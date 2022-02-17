@@ -57,23 +57,23 @@ void Gpio::setupGpio(Pin t_pin, Config::Mode t_mode,
 }
 
 void Gpio::setGpioState(uint8_t t_state) const {
-
+  setGpioBssrRegister(t_state);
 }
 
 void Gpio::setGpioStateOn() const {
-
+  setGpioBssrRegister(1);
 }
 
 void Gpio::setGpioStateOff() const {
-
+  setGpioBssrRegister(0);
 }
 
 void Gpio::toggleGpioState() const {
-
+  setGpioBssrRegister(! getGpioIdrRegister());
 }
 
 uint8_t Gpio::getGpioState() const {
-
+  return getGpioIdrRegister();
 }
 
 void Gpio::getBasePortAddress() {
@@ -112,7 +112,7 @@ void Gpio::setGpioBssrRegister(uint8_t t_value) const {
 uint8_t Gpio::getGpioIdrRegister() const {
   // value << address
   // value : 0x1 High
-  if ((m_portAddress->IDR & (0x1 << m_cfg.pin.pin)) == (0x1 << m_cfg.pin.pin)) {
+  if ((m_portAddress->IDR & (0x1 << m_cfg.pin.pin)) == (uint32_t(0x1 << m_cfg.pin.pin))) {
     return 1;
   // value : 0x0 Low
   } else {
