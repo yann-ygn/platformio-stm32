@@ -88,7 +88,7 @@ void Pin::pinSetup()
     {
         case pinInputFloating:
             m_pinBank->setPinMode(m_pin, GPIO_MODER_INPUT);
-            m_pinBank->setPinPud(m_pin, GPIO_PUPDR_NONE);
+            m_pinBank->setPinPud(m_pin, GPIO_PUPDR_NONE); 
             break;
 
         case pinInputPullDown:

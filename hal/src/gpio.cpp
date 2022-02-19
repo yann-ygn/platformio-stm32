@@ -5,6 +5,7 @@ using namespace hal;
 void Gpio::setupGpio() {
   // Get the GPIO bank base adress
   getBasePortAddress();
+  setupGpioPortRegister();
 
   switch (m_cfg.mode)
   {
@@ -49,6 +50,8 @@ void Gpio::setupGpio(Pin t_pin, Config::Mode t_mode,
   m_cfg.speed = t_speed;
   m_cfg.otype = t_otype;
 
+  test = uint8_t(m_cfg.mode);
+
   // Check if the pin object is valid
   if (m_cfg.pin.isValid()) {
     // Setup the pin
@@ -90,14 +93,14 @@ void Gpio::setGpioBssrRegister(uint8_t t_value) const {
   // value << address
   switch (t_value)
   {
-    // 1 << pin
+    // 0x1 << pin
     // Set pin ON
     case 1: {
       m_portAddress->BSRR = (1 << uint8_t(m_cfg.pin.pin));
       break;
     }
 
-    // 1 << (pin + 16)
+    // 0x1 << (pin + 16)
     // Set pin OFF
     case 0: {
       m_portAddress->BSRR = (1 << (uint8_t(m_cfg.pin.pin) + 16));
@@ -129,7 +132,7 @@ void Gpio::setupGpioModeRegister() const {
   //         0x3 = Analog
   // adress : pin number * 2 because each pin uses two bits
   m_portAddress->MODER &= ~(0x3 << (m_cfg.pin.pin * 2)); // Reset
-  m_portAddress->MODER |= (uint8_t(m_cfg.mode) << (m_cfg.pin.pin * 2)); // Set
+  m_portAddress->MODER |= (1 << (m_cfg.pin.pin * 2)); // Set
 }
 
 void Gpio::setupGpioPullRegister() const {
@@ -172,6 +175,15 @@ void Gpio::setupGpioPortRegister() const
       // 0x00020000 == enabled
       if ((RCC->AHBENR & RCC_AHBENR_GPIOAEN) != 0x20000) {
         RCC->AHBENR |= RCC_AHBENR_GPIOAEN;
+      }
+    }
+  #endif
+
+  #ifdef GPIOB
+    if (m_portAddress == GPIOB) {
+      // 0x00020000 == enabled
+      if ((RCC->AHBENR & RCC_AHBENR_GPIOBEN) != 0x20000) {
+        RCC->AHBENR |= RCC_AHBENR_GPIOBEN;
       }
     }
   #endif

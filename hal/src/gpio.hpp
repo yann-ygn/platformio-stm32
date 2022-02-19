@@ -99,7 +99,7 @@ namespace hal {
         Config() : pin(), mode(Mode::modeInput), pull(Pull::pullNoPull), speed(Speed::speedLow), otype(OutputType::outputTypeOd) {}
       };
 
-      Gpio();
+      Gpio() = default;
 
       void setupGpio();
 
@@ -141,6 +141,7 @@ namespace hal {
 
     private:
       Config m_cfg;
+      uint8_t test = 0;
 
       // Low level address of the GPIO bank
       GPIO_TypeDef *m_portAddress = nullptr;

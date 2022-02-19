@@ -15,6 +15,10 @@ void System::incrementSystickCounter() {
   ++m_systickCounter;
 }
 
+uint32_t System::getNow() {
+  return m_systickCounter;
+}
+
 void System::setupSytem() {
   setupSystemClock();
   setupSystickCounter();

@@ -29,15 +29,24 @@ namespace hal {
         Config() : sysClk(SysClkFreq::FREQ_48MHZ) {}
       };
 
+      System() = default;
+
+      /**
+       * @brief Initialize the clock, systick
+       */
+      void setupSytem();
+
       /**
        * @brief Static method to incrmeent the systick counter
        */
       static void incrementSystickCounter();
 
       /**
-       * @brief Initialize the clock, systick
+       * @brief Returns the number of milliseconds since the MCU started
+       *
+       * @return uint32_t
        */
-      void setupSytem();
+      static uint32_t getNow();
 
     private:
       Config m_config;

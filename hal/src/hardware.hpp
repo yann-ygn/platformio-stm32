@@ -4,6 +4,7 @@
 #include <cstdint>
 #include "system.hpp"
 #include "gpio.hpp"
+#include "led.hpp"
 
 namespace hardware {
   // Pins definitions
@@ -32,10 +33,16 @@ namespace hardware {
 
   class Hardware {
     public:
+      Hardware() = default;
+
       void setupHardware();
+
+      void setupTestStuff();
+
+      void doTestStuff();
 
     private:
   };
-}
+} // namespace hardware
 
 #endif // HAL_HARDWARE_H_
