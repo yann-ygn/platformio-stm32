@@ -32,7 +32,7 @@ void System::setupSystemClock() const {
       // Flash latency register needs to be set for a 48Mhz clock
       // Registers : ACR : 0x1 << 0 = One wait state
       //             PRFTBE : 0x1 << 4 = prefecth buffer enable
-      // 0x17 = 10111b to clear both registers
+      // 0x17 = 0b10111 to clear both registers
       FLASH->ACR &= ~(0x17);
       // Set them
       FLASH->ACR |= (FLASH_ACR_LATENCY | FLASH_ACR_PRFTBE);
@@ -48,7 +48,7 @@ void System::setupSystemClock() const {
       // Registers : PLLON : 0x1 << 24 = PLL unlocked
       RCC->CR |= (RCC_CR_PLLON);
       // Wait for the PLL to be enabled
-      while (! (RCC->CR & RCC_CR_PLLRDY)) { }
+      while (! (RCC->CR & RCC_CR_PLLRDY)) {}
 
       // Set the SYSCLK source to the PLL
       // Registers : SW : 0x2 << 0 = Select the PLL
@@ -57,7 +57,7 @@ void System::setupSystemClock() const {
       // Set it
       RCC->CFGR |= (RCC_CFGR_SW_PLL);
       // Wait for the clock to be started
-      while (! (RCC->CFGR & RCC_CFGR_SWS_PLL)) { }
+      while (! (RCC->CFGR & RCC_CFGR_SWS_PLL)) {}
       break;
     }
 

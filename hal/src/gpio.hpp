@@ -54,37 +54,53 @@ namespace hal {
         /**
          * @brief Mode of operation of the GPIO
          */
-        enum class Mode: uint8_t {
-          modeInput = 0x0,              // Input
-          modeOutput = 0x1,             // Output PP
-          modeAlternateFunction = 0x2,  // Alternate function
-          modeAnalog = 0x3,             // Analog
+        enum class Mode {
+          modeInput,              // Input
+          modeOutput,             // Output PP
+          modeAlternateFunction,  // Alternate function
+          modeAnalog,             // Analog
         };
 
         /**
          * @brief State of the internal pull up/down resistor
          */
-        enum class Pull: uint8_t {
-          pullNoPull = 0x0,
-          pullPullUp = 0x1,
-          pullPullDown = 0x2,
+        enum class Pull {
+          pullNoPull,
+          pullPullUp,
+          pullPullDown,
         };
 
         /**
          * @brief Output speed of the GPIO
          */
-        enum class Speed: uint8_t {
-          speedLow = 0x0,
-          speedMed = 0x1,
-          speedHigh = 0x2,
+        enum class Speed {
+          speedLow,
+          speedMed,
+          reserved,
+          speedHigh,
         };
 
         /**
          * @brief Output type of the GPIO
          */
-        enum class OutputType: uint8_t {
-          outputTypePp = 0x0,
-          outputTypeOd = 0x1,
+        enum class OutputType {
+          outputTypePp,
+          outputTypeOd,
+        };
+
+        /**
+         * @brief Alternate function of the GPIO
+         */
+        enum class AlternadeFunction {
+          alternateFunction0,
+          alternateFunction1,
+          alternateFunction2,
+          alternateFunction3,
+          alternateFunction4,
+          alternateFunction5,
+          alternateFunction6,
+          alternateFunction7,
+          noAlternateFunction,
         };
 
         Pin pin;
@@ -92,11 +108,17 @@ namespace hal {
         Pull pull;
         Speed speed;
         OutputType otype;
+        AlternadeFunction afunction;
 
         /**
          * @brief Constructor with no arguments defines an invalid pin set to input with no pullup
          */
-        Config() : pin(), mode(Mode::modeInput), pull(Pull::pullNoPull), speed(Speed::speedLow), otype(OutputType::outputTypeOd) {}
+        Config() : pin(),
+                  mode(Mode::modeInput),
+                  pull(Pull::pullNoPull),
+                  speed(Speed::speedLow),
+                  otype(OutputType::outputTypeOd),
+                  afunction(AlternadeFunction::noAlternateFunction) {}
       };
 
       Gpio() = default;
@@ -105,10 +127,12 @@ namespace hal {
 
       void setupGpio(Pin t_pin, Config &t_cfg);
 
-      void setupGpio(Pin t_pin, Config::Mode t_mode = Config::Mode::modeInput,
+      void setupGpio(Pin t_pin,
+                    Config::Mode t_mode = Config::Mode::modeInput,
                     Config::Pull t_pull = Config::Pull::pullNoPull,
                     Config::Speed t_speed = Config::Speed::speedLow,
-                    Config::OutputType t_otype = Config::OutputType::outputTypeOd);
+                    Config::OutputType t_otype = Config::OutputType::outputTypeOd,
+                    Config::AlternadeFunction t_afunction = Config::AlternadeFunction::noAlternateFunction);
 
       /**
        * @brief Set the pin state
@@ -144,7 +168,7 @@ namespace hal {
       uint8_t test = 0;
 
       // Low level address of the GPIO bank
-      GPIO_TypeDef *m_portAddress = nullptr;
+      GPIO_TypeDef *m_gpioPort = nullptr;
 
       /**
        * @brief Set the bit set/reset register to turn the gpio high/low
@@ -163,7 +187,7 @@ namespace hal {
       /**
        * @brief Sets port address pointer according to the config pin object and the CMSIS header value
        */
-      void getBasePortAddress();
+      void getGpioPortAddress();
 
       /**
        * @brief Set the GPIO MODER register according to the config pin object and mode value
@@ -186,7 +210,12 @@ namespace hal {
       void setupGpioOutputTypeRegister() const;
 
       /**
-       * @brief Set the RCC_AHBENR register for the corresponding port according to the pin object
+       * @brief Set the GPIO AFSEL register according to the config pin object and afunction value
+       */
+      void setupGpioAlternateFunctionRegister() const;
+
+      /**
+       * @brief Enable the GPIO port
        */
       void setupGpioPortRegister() const;
   };
