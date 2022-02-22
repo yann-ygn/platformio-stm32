@@ -165,7 +165,6 @@ namespace hal {
 
     private:
       Config m_cfg;
-      uint8_t test = 0;
 
       // Low level address of the GPIO bank
       GPIO_TypeDef *m_gpioPort = nullptr;

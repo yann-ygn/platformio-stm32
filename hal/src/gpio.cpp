@@ -61,8 +61,6 @@ void Gpio::setupGpio(Pin t_pin,
   m_cfg.otype = t_otype;
   m_cfg.afunction = t_afunction;
 
-  test = uint8_t(m_cfg.mode);
-
   // Check if the pin object is valid
   if (m_cfg.pin.isValid()) {
     // Setup the pin

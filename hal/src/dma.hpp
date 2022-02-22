@@ -160,8 +160,10 @@ namespace hal {
 
       Dma() = default;
 
-      void setupDma(Config::Controller t_controller = Config::Controller::dmaController1,
-                    Config::Channel t_channel = Config::Channel::dmaChannel1,
+      void setupDma();
+
+      void setupDma(Config::Controller t_controller,
+                    Config::Channel t_channel,
                     Config::MemToMem t_memtomem = Config::MemToMem::memToMemDisabled,
                     Config::Priority t_priority = Config::Priority::priorityLow,
                     Config::MemSize t_memsize = Config::MemSize::memSize8Bits,
