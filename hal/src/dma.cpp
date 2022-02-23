@@ -72,3 +72,11 @@ void Dma::getDmaChannelAddress() {
       break;
   }
 }
+
+void Dma::setDmaMem2memRegister() const {
+  switch (m_cfg.memtomem) {
+    case Config::MemToMem::memToMemDisabled: m_dmaChannel->CCR &= ~(DMA_CCR_MEM2MEM); break;
+    case Config::MemToMem::memToMemEnabled: m_dmaChannel->CCR |= ~(DMA_CCR_MEM2MEM); break;
+    default: break;
+  }
+}

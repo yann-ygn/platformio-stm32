@@ -193,6 +193,28 @@ namespace hal {
        * @brief Sets the channel address pointer according to the config boject and the CMSIS header value
        */
       void getDmaChannelAddress();
+
+      void setDmaMem2memRegister() const;
+
+      void setDmaPriorityRegister() const;
+
+      void setDmaMsizeRegister() const;
+
+      void setDmaPsizeRegister() const;
+
+      void setDmaMincSizeRegister() const;
+
+      void setDmaPincSizeRegister() const;
+
+      void setDmaCircRegister() const;
+
+      void setDmaDirRegister() const;
+
+      void setDmaTeieRegister() const;
+
+      void setDmaHtieRegister() const;
+
+      void setDmaTcieRegister() const;
   };
 } // namespace hal
 
