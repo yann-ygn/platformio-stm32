@@ -99,7 +99,7 @@ namespace hal {
          */
         enum class DataDirection {
           readFromPeriph,
-          readSomeMemory,
+          readFromMemory,
         };
 
         /**
@@ -115,7 +115,7 @@ namespace hal {
          */
         enum class HalfTransfertInterrupt {
           htInterruptDisabled,
-          hyInterruptEnabled,
+          htInterruptEnabled,
         };
 
         /**
@@ -194,6 +194,10 @@ namespace hal {
        */
       void getDmaChannelAddress();
 
+      void enableDmaChannel() const;
+
+      void disableDmaChannel() const;
+
       void setDmaMem2memRegister() const;
 
       void setDmaPriorityRegister() const;
@@ -202,9 +206,9 @@ namespace hal {
 
       void setDmaPsizeRegister() const;
 
-      void setDmaMincSizeRegister() const;
+      void setDmaMincRegister() const;
 
-      void setDmaPincSizeRegister() const;
+      void setDmaPincRegister() const;
 
       void setDmaCircRegister() const;
 
