@@ -6,6 +6,10 @@
 #include "stm32f031x6.h"
 
 namespace hal {
+  /**
+   * @brief Generic inteface for a DMA peripheral/channel, it support no transfer opeartions
+   * and can only initialize the hardware
+   */
   class Dma {
     public:
       /**
@@ -194,8 +198,14 @@ namespace hal {
        */
       void getDmaChannelAddress();
 
+      /**
+       * @brief Enable the DMA channel
+       */
       void enableDmaChannel() const;
 
+      /**
+       * @brief Disable the DMA channel
+       */
       void disableDmaChannel() const;
 
       void setDmaMem2memRegister() const;
@@ -219,6 +229,10 @@ namespace hal {
       void setDmaHtieRegister() const;
 
       void setDmaTcieRegister() const;
+
+      void setDmaCmarRegister(uint32_t *address) const;
+
+      void setDmaCparRegister(uint32_t *address) const;
   };
 } // namespace hal
 

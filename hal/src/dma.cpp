@@ -303,3 +303,15 @@ void Dma::setDmaTcieRegister() const {
       break;
   }
 }
+
+void Dma::setDmaCmarRegister(uint32_t *address) const {
+  // Register : CMAR
+  // value : Memory address
+  m_dmaChannel->CMAR = address;
+}
+
+void Dma::setDmaCparRegister(uint32_t *address) const {
+  // Register : CMAR
+  // value : Memory address
+  m_dmaChannel->CPAR = address;
+}
