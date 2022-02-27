@@ -307,11 +307,17 @@ void Dma::setDmaTcieRegister() const {
 void Dma::setDmaCmarRegister(uint32_t *address) const {
   // Register : CMAR
   // value : Memory address
-  m_dmaChannel->CMAR = address;
+  m_dmaChannel->CMAR = uint32_t(address);
 }
 
 void Dma::setDmaCparRegister(uint32_t *address) const {
   // Register : CMAR
-  // value : Memory address
-  m_dmaChannel->CPAR = address;
+  // value : Peripehry address
+  m_dmaChannel->CPAR = uint32_t(address);
+}
+
+void Dma::setDmaCndtrRegister(uint16_t length) const {
+  // Register : CNDTR
+  // Value : Length of data to transfer
+  m_dmaChannel->CNDTR = length;
 }

@@ -166,19 +166,19 @@ namespace hal {
 
       void setupDma();
 
-      void setupDma(Config::Controller t_controller,
-                    Config::Channel t_channel,
-                    Config::MemToMem t_memtomem = Config::MemToMem::memToMemDisabled,
-                    Config::Priority t_priority = Config::Priority::priorityLow,
-                    Config::MemSize t_memsize = Config::MemSize::memSize8Bits,
-                    Config::PeriphSize t_periphsize = Config::PeriphSize::periphSize8Bits,
-                    Config::MemIncMode t_memincmode = Config::MemIncMode::memIncModeDisabled,
-                    Config::PeriphIncMode t_periphincmode = Config::PeriphIncMode::periphIncModeDisabled,
-                    Config::CircularMode t_circularmode = Config::CircularMode::circularModeDisabled,
-                    Config::DataDirection t_direction = Config::DataDirection::readFromPeriph,
-                    Config::TransferErrorInterrupt t_teinterrupt = Config::TransferErrorInterrupt::teInterruptDisabled,
-                    Config::HalfTransfertInterrupt t_htinterrupt = Config::HalfTransfertInterrupt::htInterruptDisabled,
-                    Config::TransferCompleteInterrupt t_tcinterrupt = Config::TransferCompleteInterrupt::tcInterruptDisabled);
+      virtual void setupDma(Config::Controller t_controller,
+                            Config::Channel t_channel,
+                            Config::MemToMem t_memtomem = Config::MemToMem::memToMemDisabled,
+                            Config::Priority t_priority = Config::Priority::priorityLow,
+                            Config::MemSize t_memsize = Config::MemSize::memSize8Bits,
+                            Config::PeriphSize t_periphsize = Config::PeriphSize::periphSize8Bits,
+                            Config::MemIncMode t_memincmode = Config::MemIncMode::memIncModeDisabled,
+                            Config::PeriphIncMode t_periphincmode = Config::PeriphIncMode::periphIncModeDisabled,
+                            Config::CircularMode t_circularmode = Config::CircularMode::circularModeDisabled,
+                            Config::DataDirection t_direction = Config::DataDirection::readFromPeriph,
+                            Config::TransferErrorInterrupt t_teinterrupt = Config::TransferErrorInterrupt::teInterruptDisabled,
+                            Config::HalfTransfertInterrupt t_htinterrupt = Config::HalfTransfertInterrupt::htInterruptDisabled,
+                            Config::TransferCompleteInterrupt t_tcinterrupt = Config::TransferCompleteInterrupt::tcInterruptDisabled);
 
     private:
       Config m_cfg;
@@ -233,6 +233,8 @@ namespace hal {
       void setDmaCmarRegister(uint32_t *address) const;
 
       void setDmaCparRegister(uint32_t *address) const;
+
+      void setDmaCndtrRegister(uint16_t length) const;
   };
 } // namespace hal
 
