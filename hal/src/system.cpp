@@ -9,6 +9,7 @@ extern "C" {
   }
 }
 
+uint32_t System::m_sysClockFrequency = 0;
 uint32_t System::m_systickCounter = 0;
 
 void System::incrementSystickCounter() {
@@ -58,6 +59,8 @@ void System::setupSystemClock() const {
       RCC->CFGR |= (RCC_CFGR_SW_PLL);
       // Wait for the clock to be started
       while (! (RCC->CFGR & RCC_CFGR_SWS_PLL)) {}
+
+      m_sysClockFrequency = 48000000;
       break;
     }
 

@@ -51,6 +51,9 @@ namespace hal {
     private:
       Config m_config;
 
+      // Clock frequency
+      static uint32_t m_sysClockFrequency;
+
       // Holds the systick counter value
       static uint32_t m_systickCounter;
 
