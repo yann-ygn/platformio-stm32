@@ -145,7 +145,7 @@ namespace hal {
         TransferCompleteInterrupt tcinterrupt;
 
         /**
-         * @brief Constructor with no arguments defines an invalid dma object
+         * @brief Constructor with no arguments defines an invalid DMA object
          */
         Config() : controller(Controller::dmaController1),
                   channel(Channel::dmaChannel1),

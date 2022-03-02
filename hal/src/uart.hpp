@@ -9,23 +9,35 @@
 namespace hal {
   class Usart {
     public:
+      /**
+       * @brief Holds the configuration of the USART peripheral
+       */
       struct Config {
+        /**
+         * @brief USART Peripheral
+         */
         enum class Periph {
           Usart1,
           Usart2,
         };
 
+        /**
+         * @brief UART baud rate
+         */
         enum class BaudRate {
           BaudRate9600,
         };
 
-        Pin txPin;
-        Pin rxPin;
+        Pin txpin;
+        Pin rxpin;
         Periph periph;
         BaudRate baud;
 
-        Config() : txPin(),
-                  rxPin(),
+        /**
+         * @brief Constructor with no arguments defines an invalid USART object
+         */
+        Config() : txpin(),
+                  rxpin(),
                   periph(Periph::Usart1),
                   baud(BaudRate::BaudRate9600) {}
       };
