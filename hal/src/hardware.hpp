@@ -5,6 +5,7 @@
 #include "system.hpp"
 #include "gpio.hpp"
 #include "led.hpp"
+#include "uart.hpp"
 
 namespace hardware {
   // Pins definitions
@@ -30,6 +31,8 @@ namespace hardware {
   constexpr hal::Pin A1  = hal::Pin(hal::GpioPort::gpioPortA, 1);
   constexpr hal::Pin A0  = hal::Pin(hal::GpioPort::gpioPortA, 0);
   constexpr hal::Pin D13 = hal::Pin(hal::GpioPort::gpioPortB, 3);
+  constexpr hal::Pin TX = hal::Pin(hal::GpioPort::gpioPortA, 2);
+  constexpr hal::Pin RX = hal::Pin(hal::GpioPort::gpioPortA, 15);
 
   class Hardware {
     public:

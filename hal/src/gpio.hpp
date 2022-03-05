@@ -5,6 +5,9 @@
 
 #include "stm32f031x6.h"
 
+#include "system.hpp"
+#include "gpio.hpp"
+
 namespace hal {
   /**
    * @brief GPIO port names

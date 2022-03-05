@@ -4,9 +4,13 @@
 #include <cstdint>
 
 #include "stm32f031x6.h"
+#include "system.hpp"
 #include "gpio.hpp"
 
 namespace hal {
+  /**
+   * @brief Very basic UART implementation using blocking RX/TX lines
+   */
   class Usart {
     public:
       /**
@@ -21,6 +25,12 @@ namespace hal {
           Usart2,
         };
 
+        enum class Mode {
+          RxOnly,
+          TxOnly,
+          Bidirectionnal,
+        };
+
         /**
          * @brief UART baud rate
          */
@@ -31,6 +41,7 @@ namespace hal {
         Pin txpin;
         Pin rxpin;
         Periph periph;
+        Mode mode;
         BaudRate baud;
 
         /**
@@ -47,12 +58,29 @@ namespace hal {
       virtual void setupUsart(Pin t_txPin,
                               Pin t_rxPin,
                               Config::Periph t_periph = Config::Periph::Usart1,
+                              Config::Mode t_mode = Config::Mode::Bidirectionnal,
                               Config::BaudRate t_baud = Config::BaudRate::BaudRate9600);
+
+      void test();
 
     private:
       Config m_cfg;
 
       USART_TypeDef *m_usartPeriph = nullptr;
+      hal::Gpio m_gpioTx;
+      hal::Gpio m_gpioRx;
+
+      void getUsartPeriphAddress();
+
+      void enableUsartPeriph() const;
+
+      void enableUsart() const;
+
+      void enableUsartTx() const;
+
+      void enableUsartRx() const;
+
+      void setUsartBrrRegister(uint16_t value) const;
   };
 }
 

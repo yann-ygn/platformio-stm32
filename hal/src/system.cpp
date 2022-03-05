@@ -12,6 +12,10 @@ extern "C" {
 uint32_t System::m_sysClockFrequency = 0;
 uint32_t System::m_systickCounter = 0;
 
+uint32_t System::getSysClockFrequency() {
+  return m_sysClockFrequency;
+}
+
 void System::incrementSystickCounter() {
   ++m_systickCounter;
 }

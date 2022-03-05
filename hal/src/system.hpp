@@ -37,6 +37,13 @@ namespace hal {
       void setupSytem();
 
       /**
+       * @brief Returns the current clock frequency set-up
+       *
+       * @return uint32_t
+       */
+      static uint32_t getSysClockFrequency();
+
+      /**
        * @brief Static method to incrmeent the systick counter
        */
       static void incrementSystickCounter();
