@@ -66,8 +66,20 @@ void Usart::setupUsart(Pin t_txPin,
   }
 }
 
-void Usart::test() {
-  m_usartPeriph->TDR = (uint8_t)'a';
+bool Usart::isUsartDataAvailable() const {
+  if (getUsartRxneRegister() == 0x20) {
+    return true;
+  } else {
+    return false;
+  }
+}
+
+void Usart::printUsart(uint8_t t_data) const {
+  m_usartPeriph->TDR = t_data;
+}
+
+uint8_t Usart::readUsart() const {
+  return getUsartRdrRegister();
 }
 
 void Usart::getUsartPeriphAddress() {
@@ -121,4 +133,14 @@ void Usart::setUsartBrrRegister(uint16_t value) const {
   // Register : BRR
   // value
   m_usartPeriph->BRR = value;
+}
+
+uint32_t Usart::getUsartRxneRegister() const {
+  // Register : RXNE
+  // address : 5
+  return m_usartPeriph->ISR & USART_ISR_RXNE;
+}
+
+uint8_t Usart::getUsartRdrRegister() const {
+  return m_usartPeriph->RDR;
 }

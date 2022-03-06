@@ -63,6 +63,12 @@ namespace hal {
 
       void test();
 
+      bool isUsartDataAvailable() const;
+
+      void printUsart(uint8_t t_data) const;
+
+      uint8_t readUsart() const;
+
     private:
       Config m_cfg;
 
@@ -81,6 +87,15 @@ namespace hal {
       void enableUsartRx() const;
 
       void setUsartBrrRegister(uint16_t value) const;
+
+      /**
+       * @brief Read the RX Not Empty register
+       *
+       * @return uint32_t 0x20 if data is available
+       */
+      uint32_t getUsartRxneRegister() const;
+
+      uint8_t getUsartRdrRegister() const;
   };
 }
 
