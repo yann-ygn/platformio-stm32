@@ -4,27 +4,42 @@ using namespace hardware;
 
 const size_t buffsize = 50;
 
-hal::System system;
+hal::System system0;
 hal::BlinkingLed led0;
-hal::Usart serial;
+hal::Usart serial0;
 hal::CircBuff<uint8_t, buffsize> circbuff;
+hal::Interrupts interrupts0;
+hal::TemporarySwitch switch0;
+
+void testInterrupt() {
+  led0.toggleLedState();
+}
 
 void Hardware::setupHardware() {
-  system.setupSytem();
+  system0.setupSytem();
 }
 
 void Hardware::setupTestStuff() {
   led0.setupLed(hardware::D13);
-  serial.setupUsart(hardware::TX, hardware::RX,
+  switch0.setupTempSwitch(D6, 1000);
+  serial0.setupUsart(hardware::TX, hardware::RX,
                     hal::Usart::Config::Periph::Usart1,
                     hal::Usart::Config::Mode::Bidirectionnal,
                     hal::Usart::Config::BaudRate::BaudRate9600);
+  interrupts0.setupExternalInterrupt(D6, hal::InterruptTrigger::interruptTriggerFalling, 0, testInterrupt);
 }
 
 void Hardware::doTestStuff() {
-  if (serial.isUsartDataAvailable()) {
-    circbuff.putItem(serial.readUsart());
-    serial.printUsart(circbuff.getItem());
+  /*
+  switch0.pollTempSwitch();
+  if (switch0.isReleased()) {
+    led0.toggleLedState();
+    serial0.printUsart(97);
   }
-  led0.blinkLed(500);
+  */
+
+  if (serial0.isUsartDataAvailable()) {
+    circbuff.putItem(serial0.readUsart());
+    serial0.printUsart(circbuff.getItem());
+  }
 }

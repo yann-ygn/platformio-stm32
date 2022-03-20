@@ -4,7 +4,7 @@ using namespace hal;
 
 constexpr uint8_t extiLines = 16;
 
-ExternalInterrupt *setupExtiInterrupts() {
+ExternalInterrupt *initExtiInterrupts() {
   // Blank object to initialize the actual interrupt object array
   ExternalInterrupt intr;
 
@@ -14,10 +14,99 @@ ExternalInterrupt *setupExtiInterrupts() {
     extiIntr[i] = intr;
   }
 
+  uint8_t exticrReg = 0; // SYSCFG->EXTICR[i] Register counter, 4 lines per
+  uint8_t exticrOffset = 0; // Offset within the register, 4 bits per line
+  for (uint8_t i = 0; i < extiLines; ++i) {
+    extiIntr[i].interruptRegister = exticrReg;
+    extiIntr[i].interruptRegisterOffset = exticrOffset * 4;
+
+    // Max value for the register, switch to the next one
+    if (++exticrOffset >= 4) {
+      ++exticrReg;
+      exticrOffset = 0;
+    }
+  }
+
   return extiIntr;
 }
 
-static ExternalInterrupt *extiInterrupts = setupExtiInterrupts();
+// Construct the external interrupts array
+static ExternalInterrupt *extiInterrupts = initExtiInterrupts();
+
+void ExternalInterrupt::setupInterrupt() {
+  // register : EXTICR[i]
+  // port << offset
+  // port :  0x0 = GPIO PORT A
+  //         0x1 = GPIO PORT B
+  //         0x2 = GPIO PORT C
+  //         0x3 = GPIO PORT D
+  //         0x4 = GPIO PORT E
+  //         0x5 = GPIO PORT F
+  // offset : Offset within the register, a line uses 4 bits
+  SYSCFG->EXTICR[interruptRegister] |= (interruptPort << interruptRegisterOffset);
+
+  // register : EXTI_IMR
+  // value << address
+  // value :  0x0 = Mask request
+  //          0x1 = Don't mask request
+  // address : interrupt line = pin number
+  EXTI->IMR |= (1 << interruptPin);
+
+  // Setup the interrupt trigger type
+  switch (interruptTrigger)
+  {
+    case InterruptTrigger::interruptTriggerRaising: {
+      // register : EXTI_RTSR
+      // value << address
+      // value : ~(0x1) = 0b0 clear the register
+      //         0x0 = Disable the raising trigger
+      //         0x1 = Enable the raising trigger
+      // address : interrupt line = pin number
+      EXTI->RTSR |= (1 << interruptPin);
+
+      // register : EXTI_FTSR
+      // value << address
+      // value : ~(0x1) = 0b0 clear the register
+      //         0x0 = Disable the falling trigger
+      //         0x1 = Enable the falling trigger
+      // address : interrupt line = pin number
+      EXTI->FTSR &= ~(1 << interruptPin);
+      break;
+    }
+
+    case InterruptTrigger::interruptTriggerFalling: {
+      EXTI->RTSR &= ~(1 << interruptPin);
+      EXTI->FTSR |= (1 << interruptPin);
+      break;
+    }
+
+    case InterruptTrigger::interruptTriggerBoth: {
+      EXTI->RTSR |= (1 << interruptPin);
+      EXTI->FTSR |= (1 << interruptPin);
+      break;
+    }
+
+    default: break;
+  }
+
+  // Set the interrupt type value according to the pin #
+  if (interruptPin == 0 || interruptPin == 1) {
+    interruptType = EXTI0_1_IRQn;
+  }
+  else if (interruptPin == 2 || interruptPin == 3) {
+    interruptType = EXTI2_3_IRQn;
+  }
+  else if (interruptPin > 3 && interruptPin < 16) {
+    interruptType = EXTI4_15_IRQn;
+  }
+
+  // Set the priority and enable the interrupt
+  NVIC_SetPriority(interruptType, interruptPriority);
+  NVIC_EnableIRQ(interruptType);
+
+  // Mark as active
+  interruptActive = true;
+}
 
 // ISR definitions
 extern "C" {
@@ -57,4 +146,22 @@ extern "C" {
       }
     }
   }
+}
+
+void Interrupts::setupExternalInterrupt(Pin t_pin, InterruptTrigger t_trigger, uint32_t t_priority, std::function<void()> t_callback) {
+  m_cfg.pin = t_pin;
+  m_cfg.trigger = t_trigger;
+  m_cfg.priority = t_priority;
+  m_cfg.callback = t_callback;
+
+  // Retrieve the underlying interrupt object
+  ExternalInterrupt &extiIntr = extiInterrupts[m_cfg.pin.pin];
+
+  // Set it up
+  extiIntr.interruptPort = (uint32_t)m_cfg.pin.port;
+  extiIntr.interruptPin = m_cfg.pin.pin;
+  extiIntr.interruptTrigger = m_cfg.trigger;
+  extiIntr.interruptPriority = m_cfg.priority;
+  extiIntr.interruptCallback = m_cfg.callback;
+  extiIntr.setupInterrupt();
 }

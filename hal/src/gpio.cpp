@@ -128,7 +128,8 @@ uint8_t Gpio::getGpioIdrRegister() const {
   if ((m_gpioPort->IDR & (0x1 << m_cfg.pin.pin)) == (uint32_t(0x1 << m_cfg.pin.pin))) {
     return 1;
   // value : 0x0 Low
-  } else {
+  }
+  else {
     return 0;
   }
 }
@@ -202,7 +203,8 @@ void Gpio::setupGpioAlternateFunctionRegister() const {
   if (m_cfg.pin.pin < 8) {
     m_gpioPort->AFR[0] &= ~(0xF << (m_cfg.pin.pin * 4)); // Reset
     m_gpioPort->AFR[0] |= (uint8_t(m_cfg.afunction) << (m_cfg.pin.pin * 4)); // Set
-  } else {
+  }
+  else {
     m_gpioPort->AFR[1] &= ~(0xF << ((m_cfg.pin.pin - 8) * 4)); // Reset
     m_gpioPort->AFR[1] |= (uint8_t(m_cfg.afunction) << ((m_cfg.pin.pin - 8) * 4)); // Set
   }

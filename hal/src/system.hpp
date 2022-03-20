@@ -73,6 +73,11 @@ namespace hal {
        * @brief Initialize the systick registers and interrupt
        */
       void setupSystickCounter() const;
+
+      /**
+       * @brief Enable the SYSCFG peripheral (needed for external interrupts)
+       */
+      void setupSyscfgPeripheral() const;
   };
 } // namespace hal
 

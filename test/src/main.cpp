@@ -19,7 +19,7 @@ int main(void)
     Bank bankB(GPIOB);
     bankB.bankSetup();
 
-    TemporarySwitch tempSwitch(& bankB, 1, pinInputPullUp, 500);
+    TemporarySwitch tempSwitch(& bankA, 2, pinInputPullUp, 500);
     tempSwitch.tempSwitchSetup();
 
     Led led(& bankB, 3, pinOutputPushPull);
@@ -35,16 +35,15 @@ int main(void)
     while (1)
     {
         tempSwitch.tempSwitchPoll();
-        led.blinkLed(500);
 
         if (tempSwitch.tempSwitchPushed())
         {
-            //log.log("abc");
+            led.ledTurnOn();
         }
 
         if (tempSwitch.tempSwitchLongPress())
         {
-            //log.log("def");
+            led.ledTurnOff();
         }
     }
 }

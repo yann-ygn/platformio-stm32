@@ -5,8 +5,10 @@
 #include "system.hpp"
 #include "gpio.hpp"
 #include "led.hpp"
+#include "switch.hpp"
 #include "uart.hpp"
 #include "circbuff.hpp"
+#include "interrupts.hpp"
 
 namespace hardware {
   // Pins definitions

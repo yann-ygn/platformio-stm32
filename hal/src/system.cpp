@@ -27,6 +27,7 @@ uint32_t System::getNow() {
 void System::setupSytem() {
   setupSystemClock();
   setupSystickCounter();
+  setupSyscfgPeripheral();
 }
 
 void System::setupSystemClock() const {
@@ -76,4 +77,8 @@ void System::setupSystemClock() const {
 void System::setupSystickCounter() const {
   // Setup the systick to generate an interrupt every millisecond
   SysTick_Config(uint32_t(m_config.sysClk) / 1000);
+}
+
+void System::setupSyscfgPeripheral()  const {
+  RCC->APB2ENR |= RCC_APB2ENR_SYSCFGEN;
 }
