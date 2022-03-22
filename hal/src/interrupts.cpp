@@ -4,12 +4,12 @@ using namespace hal;
 
 constexpr uint8_t extiLines = 16;
 
-ExternalInterrupt *initExtiInterrupts() {
+ExternalInterruptSource *initExtiInterruptsSource() {
   // Blank object to initialize the actual interrupt object array
-  ExternalInterrupt intr;
+  ExternalInterruptSource intr;
 
   // Create the object array and initialize it
-  static ExternalInterrupt extiIntr[extiLines];
+  static ExternalInterruptSource extiIntr[extiLines];
   for (uint8_t i = 0; i < extiLines; ++i) {
     extiIntr[i] = intr;
   }
@@ -31,9 +31,9 @@ ExternalInterrupt *initExtiInterrupts() {
 }
 
 // Construct the external interrupts array
-static ExternalInterrupt *extiInterrupts = initExtiInterrupts();
+static ExternalInterruptSource *extiInterruptsSources = initExtiInterruptsSource();
 
-void ExternalInterrupt::setupInterrupt() {
+void ExternalInterruptSource::setupInterrupt() {
   // register : EXTICR[i]
   // port << offset
   // port :  0x0 = GPIO PORT A
@@ -115,11 +115,11 @@ extern "C" {
     // Check if line 1 or 0 received an event
     if (EXTI->PR & EXTI_PR_PR1) {
       EXTI->PR |= EXTI_PR_PR1; // Reset the pending register
-      extiInterrupts[1].interruptCallback(); // Line 1 callback
+      extiInterruptsSources[1].interruptCallback(); // Line 1 callback
     }
     else {
       EXTI->PR |= EXTI_PR_PR0; // Reset the pending register
-      extiInterrupts[0].interruptCallback(); //  Line 0 callback
+      extiInterruptsSources[0].interruptCallback(); //  Line 0 callback
     }
   }
 
@@ -128,11 +128,11 @@ extern "C" {
     // Check if line 2 or 3 received an event
     if (EXTI->PR & EXTI_PR_PR2) {
       EXTI->PR |= EXTI_PR_PR2; // Reset the pending register
-      extiInterrupts[2].interruptCallback(); // Line 2 callback
+      extiInterruptsSources[2].interruptCallback(); // Line 2 callback
     }
     else {
       EXTI->PR |= EXTI_PR_PR3; // Reset the pending register
-      extiInterrupts[3].interruptCallback(); // Line 3 callback
+      extiInterruptsSources[3].interruptCallback(); // Line 3 callback
     }
   }
 
@@ -142,26 +142,21 @@ extern "C" {
     for (uint8_t i = 4; i < extiLines; ++i) {
       if (EXTI->PR & (1 << i)) {
         EXTI->PR |= (1 << i); // Reset the pending register
-        extiInterrupts[i].interruptCallback(); // Line i callback
+        extiInterruptsSources[i].interruptCallback(); // Line i callback
       }
     }
   }
 }
 
-void Interrupts::setupExternalInterrupt(Pin t_pin, InterruptTrigger t_trigger, uint32_t t_priority, std::function<void()> t_callback) {
-  m_cfg.pin = t_pin;
-  m_cfg.trigger = t_trigger;
-  m_cfg.priority = t_priority;
-  m_cfg.callback = t_callback;
-
+void ExternalInterrupts::setupExternalInterrupt(Pin t_pin, InterruptTrigger t_trigger, uint32_t t_priority, std::function<void()> t_callback) {
   // Retrieve the underlying interrupt object
-  ExternalInterrupt &extiIntr = extiInterrupts[m_cfg.pin.pin];
+  ExternalInterruptSource &extiIntr = extiInterruptsSources[t_pin.pin];
 
   // Set it up
-  extiIntr.interruptPort = (uint32_t)m_cfg.pin.port;
-  extiIntr.interruptPin = m_cfg.pin.pin;
-  extiIntr.interruptTrigger = m_cfg.trigger;
-  extiIntr.interruptPriority = m_cfg.priority;
-  extiIntr.interruptCallback = m_cfg.callback;
+  extiIntr.interruptPort = (uint32_t)t_pin.port;
+  extiIntr.interruptPin = t_pin.pin;
+  extiIntr.interruptTrigger = t_trigger;
+  extiIntr.interruptPriority = t_priority;
+  extiIntr.interruptCallback = t_callback;
   extiIntr.setupInterrupt();
 }

@@ -66,7 +66,7 @@ void Usart::setupUsart(Pin t_txPin,
   }
 }
 
-bool Usart::isUsartDataAvailable() const {
+bool UsartPolling::isDataAvailable() const {
   if (getUsartRxneRegister() == 0x20) {
     return true;
   } else {
@@ -74,11 +74,11 @@ bool Usart::isUsartDataAvailable() const {
   }
 }
 
-void Usart::printUsart(uint8_t t_data) const {
+void UsartPolling::printUsart(uint8_t t_data) const {
   m_usartPeriph->TDR = t_data;
 }
 
-uint8_t Usart::readUsart() const {
+uint8_t UsartPolling::readUsart() const {
   return getUsartRdrRegister();
 }
 

@@ -19,7 +19,7 @@ namespace hal
   /**
    * @brief 
    */
-  struct ExternalInterrupt {
+  struct ExternalInterruptSource {
     bool interruptActive = false;
     uint8_t interruptPort = 0;
     uint8_t interruptPin = 0;
@@ -33,43 +33,18 @@ namespace hal
     void setupInterrupt();
   };
 
-  struct PeripheralInterrupt {
-
-  };
-
   /**
    * @brief Simple interface to setup an interrupt on a GPIO or a peripheral
    */
-  class Interrupts {
+  class ExternalInterrupts {
     public:
-      /**
-       * @brief Holds the configuration for the interrupt
-       */
-      struct Config {
-        enum class InterruptPeripheral {
-          InterruptPeripheralNone,
-        };
 
-        Pin pin;
-        InterruptPeripheral periph;
-        InterruptTrigger trigger;
-        uint32_t priority;
-        std::function<void()> callback;
+      ExternalInterrupts() = default;
 
-        Config() : pin(),
-                   periph(InterruptPeripheral::InterruptPeripheralNone),
-                   trigger(InterruptTrigger::interruptTriggerNone),
-                   priority(0) {}
-      };
-
-      Interrupts() = default;
-
-      void setupExternalInterrupt(Pin t_pin, InterruptTrigger t_trigger, uint32_t t_priority, std::function<void()> t_callback);
-      void setupPeripheralInterrupt();
-
-    private:
-      Config m_cfg;
+      static void setupExternalInterrupt(Pin t_pin, InterruptTrigger t_trigger, uint32_t t_priority, std::function<void()> t_callback);
   };
+
+  static ExternalInterrupts ExtiInterrupts;
 } // namespace hal
 
 

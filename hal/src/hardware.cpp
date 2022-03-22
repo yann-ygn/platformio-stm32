@@ -6,9 +6,8 @@ const size_t buffsize = 50;
 
 hal::System system0;
 hal::BlinkingLed led0;
-hal::Usart serial0;
+hal::UsartPolling serial0;
 hal::CircBuff<uint8_t, buffsize> circbuff;
-hal::Interrupts interrupts0;
 hal::TemporarySwitch switch0;
 
 void testInterrupt() {
@@ -26,7 +25,7 @@ void Hardware::setupTestStuff() {
                     hal::Usart::Config::Periph::Usart1,
                     hal::Usart::Config::Mode::Bidirectionnal,
                     hal::Usart::Config::BaudRate::BaudRate9600);
-  interrupts0.setupExternalInterrupt(D6, hal::InterruptTrigger::interruptTriggerFalling, 0, testInterrupt);
+  hal::ExtiInterrupts.setupExternalInterrupt(D6, hal::InterruptTrigger::interruptTriggerFalling, 0, testInterrupt);
 }
 
 void Hardware::doTestStuff() {
@@ -38,7 +37,7 @@ void Hardware::doTestStuff() {
   }
   */
 
-  if (serial0.isUsartDataAvailable()) {
+  if (serial0.isDataAvailable()) {
     circbuff.putItem(serial0.readUsart());
     serial0.printUsart(circbuff.getItem());
   }

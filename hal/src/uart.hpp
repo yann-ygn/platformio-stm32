@@ -9,7 +9,7 @@
 
 namespace hal {
   /**
-   * @brief Very basic UART implementation using blocking RX/TX lines
+   * @brief Very basic UART implementation with no functionality
    */
   class Usart {
     public:
@@ -61,15 +61,7 @@ namespace hal {
                               Config::Mode t_mode = Config::Mode::Bidirectionnal,
                               Config::BaudRate t_baud = Config::BaudRate::BaudRate9600);
 
-      void test();
-
-      bool isUsartDataAvailable() const;
-
-      void printUsart(uint8_t t_data) const;
-
-      uint8_t readUsart() const;
-
-    private:
+    protected:
       Config m_cfg;
 
       USART_TypeDef *m_usartPeriph = nullptr;
@@ -96,6 +88,15 @@ namespace hal {
       uint32_t getUsartRxneRegister() const;
 
       uint8_t getUsartRdrRegister() const;
+  };
+
+  class UsartPolling : public Usart {
+    public:
+      bool isDataAvailable() const;
+
+      void printUsart(uint8_t t_data) const;
+
+      uint8_t readUsart() const;
   };
 }
 
