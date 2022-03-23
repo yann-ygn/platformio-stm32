@@ -6,6 +6,7 @@
 #include "stm32f031x6.h"
 #include "system.hpp"
 #include "gpio.hpp"
+#include "circbuff.hpp"
 
 namespace hal {
   /**
@@ -63,6 +64,7 @@ namespace hal {
 
     protected:
       Config m_cfg;
+      CircBuff<uint8_t, 255> m_buffer;
 
       USART_TypeDef *m_usartPeriph = nullptr;
       hal::Gpio m_gpioTx;

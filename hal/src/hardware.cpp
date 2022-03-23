@@ -7,8 +7,8 @@ const size_t buffsize = 50;
 hal::System system0;
 hal::BlinkingLed led0;
 hal::UsartPolling serial0;
-hal::CircBuff<uint8_t, buffsize> circbuff;
 hal::TemporarySwitch switch0;
+hal::CircBuff<uint8_t, 255> circbuff;
 
 void testInterrupt() {
   led0.toggleLedState();

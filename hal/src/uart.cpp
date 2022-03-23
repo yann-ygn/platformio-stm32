@@ -67,11 +67,7 @@ void Usart::setupUsart(Pin t_txPin,
 }
 
 bool UsartPolling::isDataAvailable() const {
-  if (getUsartRxneRegister() == 0x20) {
-    return true;
-  } else {
-    return false;
-  }
+  return (getUsartRxneRegister() & 0x20);
 }
 
 void UsartPolling::printUsart(uint8_t t_data) const {
