@@ -13,11 +13,11 @@ namespace hal {
    * @brief GPIO port names
    */
   enum class GpioPort {
-    gpioPortA,
-    gpioPortB,
-    gpioPortC,
-    gpioPortF,
-    gpioPortX,
+    portA,
+    portB,
+    portC,
+    portF,
+    portX,
   };
 
   /**
@@ -38,74 +38,74 @@ namespace hal {
     /**
      * @brief Construct an invalid Pin object
      */
-    constexpr Pin() : port(GpioPort::gpioPortX), pin(255) {}
+    constexpr Pin() : port(GpioPort::portX), pin(255) {}
 
     /**
      * @brief Checks for the validity of a pin
      *
      * @return true if the pin is a combination of a valid port/pin
      */
-    constexpr bool isValid() const { return port != GpioPort::gpioPortX && pin < 16; }
+    constexpr bool isValid() const { return port != GpioPort::portX && pin < 16; }
   };
 
-  class Gpio {
+  class GpioBase {
     public:
+      /**
+       * @brief Mode of operation of the GPIO
+       */
+      enum class Mode {
+        modeInput,              // Input
+        modeOutput,             // Output PP
+        modeAlternateFunction,  // Alternate function
+        modeAnalog,             // Analog
+      };
+
+      /**
+       * @brief State of the internal pull up/down resistor
+       */
+      enum class Pull {
+        noPull,
+        pullUp,
+        pullDown,
+      };
+
+      /**
+       * @brief Output speed of the GPIO
+       */
+      enum class Speed {
+        speedLow,
+        speedMed,
+        reserved,
+        speedHigh,
+      };
+
+      /**
+       * @brief Output type of the GPIO
+       */
+      enum class OutputType {
+        outputTypePp,
+        outputTypeOd,
+      };
+
+      /**
+       * @brief Alternate function of the GPIO
+       */
+      enum class AlternadeFunction {
+        alternateFunction0,
+        alternateFunction1,
+        alternateFunction2,
+        alternateFunction3,
+        alternateFunction4,
+        alternateFunction5,
+        alternateFunction6,
+        alternateFunction7,
+        noAlternateFunction,
+      };
+
       /**
        * @brief Holds the configuration for a GPIO
        */
       struct Config {
-        /**
-         * @brief Mode of operation of the GPIO
-         */
-        enum class Mode {
-          modeInput,              // Input
-          modeOutput,             // Output PP
-          modeAlternateFunction,  // Alternate function
-          modeAnalog,             // Analog
-        };
-
-        /**
-         * @brief State of the internal pull up/down resistor
-         */
-        enum class Pull {
-          pullNoPull,
-          pullPullUp,
-          pullPullDown,
-        };
-
-        /**
-         * @brief Output speed of the GPIO
-         */
-        enum class Speed {
-          speedLow,
-          speedMed,
-          reserved,
-          speedHigh,
-        };
-
-        /**
-         * @brief Output type of the GPIO
-         */
-        enum class OutputType {
-          outputTypePp,
-          outputTypeOd,
-        };
-
-        /**
-         * @brief Alternate function of the GPIO
-         */
-        enum class AlternadeFunction {
-          alternateFunction0,
-          alternateFunction1,
-          alternateFunction2,
-          alternateFunction3,
-          alternateFunction4,
-          alternateFunction5,
-          alternateFunction6,
-          alternateFunction7,
-          noAlternateFunction,
-        };
-
         Pin pin;
         Mode mode;
         Pull pull;
@@ -118,53 +118,49 @@ namespace hal {
          */
         Config() : pin(),
                   mode(Mode::modeInput),
-                  pull(Pull::pullNoPull),
+                  pull(Pull::noPull),
                   speed(Speed::speedLow),
                   otype(OutputType::outputTypeOd),
                   afunction(AlternadeFunction::noAlternateFunction) {}
       };
 
-      Gpio() = default;
-
-      void setupGpio();
-
-      void setupGpio(Pin t_pin, Config &t_cfg);
+      GpioBase() = default;
 
       void setupGpio(Pin t_pin,
-                    Config::Mode t_mode = Config::Mode::modeInput,
-                    Config::Pull t_pull = Config::Pull::pullNoPull,
-                    Config::Speed t_speed = Config::Speed::speedLow,
-                    Config::OutputType t_otype = Config::OutputType::outputTypeOd,
-                    Config::AlternadeFunction t_afunction = Config::AlternadeFunction::noAlternateFunction);
+                     Mode t_mode = Mode::modeInput,
+                     Pull t_pull = Pull::noPull,
+                     Speed t_speed = Speed::speedLow,
+                     OutputType t_otype = OutputType::outputTypeOd,
+                     AlternadeFunction t_afunction = AlternadeFunction::noAlternateFunction);
+
+      /**
+       * @brief Set the GPIO high
+       */
+      void setOn() const;
+
+      /**
+       * @brief Set the Gpio low
+       */
+      void setOff() const;
+
+      /**
+       * @brief Toggle the Gpio state
+       */
+      void toggleState() const;
 
       /**
        * @brief Set the pin state
        *
        * @param state 1 : high | 0 : low
        */
-      void setGpioState(uint8_t t_state) const;
-
-      /**
-       * @brief Set the GPIO high
-       */
-      void setGpioStateOn() const;
-
-      /**
-       * @brief Set the Gpio low
-       */
-      void setGpioStateOff() const;
-
-      /**
-       * @brief Toggle the Gpio state
-       */
-      void toggleGpioState() const;
+      void setState(uint8_t t_state) const;
 
       /**
        * @brief Get the gpio state
        *
        * @return uint8_t 1 : high | 0 : low
        */
-      uint8_t getGpioState() const;
+      uint8_t getState() const;
 
     private:
       Config m_cfg;
@@ -177,44 +173,44 @@ namespace hal {
        *
        * @param t_value 1 : on | 0 : off
        */
-      void setGpioBssrRegister(uint8_t t_value) const;
+      void setBssrRegister(uint8_t t_value) const;
 
       /**
        * @brief Read the IDR register
        *
        * @return uint8_t Register value
        */
-      uint8_t getGpioIdrRegister() const;
+      uint8_t getIdrRegister() const;
 
       /**
        * @brief Sets port address pointer according to the config pin object and the CMSIS header value
        */
-      void getGpioPortAddress();
+      void getPortAddress();
 
       /**
        * @brief Set the GPIO MODER register according to the config pin object and mode value
        */
-      void setupGpioModeRegister() const;
+      void setupModerRegister() const;
 
       /**
        * @brief Set the GPIO PUPDR register according to the config pin object and pull value
        */
-      void setupGpioPullRegister() const;
+      void setupPupdrRegister() const;
 
       /**
        * @brief Set the GPIO SPEEDR register according to the config pin object and speed value
        */
-      void setupGpioSpeedRegister() const;
+      void setupOspeedrRegister() const;
 
       /**
        * @brief Set the GPIO OTYPER register according to the config pin object and otype value
        */
-      void setupGpioOutputTypeRegister() const;
+      void setupOtyperRegister() const;
 
       /**
        * @brief Set the GPIO AFSEL register according to the config pin object and afunction value
        */
-      void setupGpioAlternateFunctionRegister() const;
+      void setupAfrRegister() const;
 
       /**
        * @brief Enable the GPIO port

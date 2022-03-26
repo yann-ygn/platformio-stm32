@@ -2,57 +2,7 @@
 
 using namespace hal;
 
-void Gpio::setupGpio() {
-  // Get the GPIO bank base adress
-  getGpioPortAddress();
-  setupGpioPortRegister();
-
-  switch (m_cfg.mode)
-  {
-    case Config::Mode::modeInput: {
-      setupGpioModeRegister();
-      setupGpioPullRegister();
-      break;
-    }
-    case Config::Mode::modeOutput: {
-      setupGpioModeRegister();
-      setupGpioOutputTypeRegister();
-      setupGpioSpeedRegister();
-      setupGpioPullRegister();
-      break;
-    }
-    case Config::Mode::modeAlternateFunction: {
-      setupGpioAlternateFunctionRegister();
-      setupGpioOutputTypeRegister();
-      setupGpioSpeedRegister();
-      setupGpioPullRegister();
-      setupGpioModeRegister();
-      break;
-    }
-
-    default: break;
-  }
-}
-
-void Gpio::setupGpio(Pin t_pin, Config &t_cfg) {
-  // Copy the config
-  m_cfg = t_cfg;
-  // Overwrite the pin
-  m_cfg.pin = t_pin;
-
-  // Check if the pin object is valid
-  if (m_cfg.pin.isValid()) {
-      // Setup the pin
-      setupGpio();
-  }
-}
-
-void Gpio::setupGpio(Pin t_pin,
-                    Config::Mode t_mode,
-                    Config::Pull t_pull,
-                    Config::Speed t_speed,
-                    Config::OutputType t_otype,
-                    Config::AlternadeFunction t_afunction) {
+void GpioBase::setupGpio(Pin t_pin, Mode t_mode, Pull t_pull, Speed t_speed, OutputType t_otype, AlternadeFunction t_afunction) {
   // Populate the config object
   m_cfg.pin = t_pin;
   m_cfg.mode = t_mode;
@@ -64,41 +14,67 @@ void Gpio::setupGpio(Pin t_pin,
   // Check if the pin object is valid
   if (m_cfg.pin.isValid()) {
     // Setup the pin
-    setupGpio();
+    getPortAddress();
+    setupGpioPortRegister();
+
+    switch (m_cfg.mode) {
+      case Mode::modeInput: {
+        setupModerRegister();
+        setupPupdrRegister();
+        break;
+      }
+      case Mode::modeOutput: {
+        setupModerRegister();
+        setupOtyperRegister();
+        setupOspeedrRegister();
+        setupPupdrRegister();
+        break;
+      }
+      case Mode::modeAlternateFunction: {
+        setupAfrRegister();
+        setupOtyperRegister();
+        setupOspeedrRegister();
+        setupPupdrRegister();
+        setupModerRegister();
+        break;
+      }
+
+      default: break;
+    }
   }
 }
 
-void Gpio::setGpioState(uint8_t t_state) const {
-  setGpioBssrRegister(t_state);
+void GpioBase::setState(uint8_t t_state) const {
+  setBssrRegister(t_state);
 }
 
-void Gpio::setGpioStateOn() const {
-  setGpioBssrRegister(1);
+void GpioBase::setOn() const {
+  setBssrRegister(1);
 }
 
-void Gpio::setGpioStateOff() const {
-  setGpioBssrRegister(0);
+void GpioBase::setOff() const {
+  setBssrRegister(0);
 }
 
-void Gpio::toggleGpioState() const {
-  setGpioBssrRegister(! getGpioIdrRegister());
+void GpioBase::toggleState() const {
+  setBssrRegister(! getIdrRegister());
 }
 
-uint8_t Gpio::getGpioState() const {
-  return getGpioIdrRegister();
+uint8_t GpioBase::getState() const {
+  return getIdrRegister();
 }
 
-void Gpio::getGpioPortAddress() {
+void GpioBase::getPortAddress() {
   switch (m_cfg.pin.port) {
-    case GpioPort::gpioPortA: m_gpioPort = GPIOA; break;
-    case GpioPort::gpioPortB: m_gpioPort = GPIOB; break;
-    case GpioPort::gpioPortC: m_gpioPort = GPIOC; break;
-    case GpioPort::gpioPortF: m_gpioPort = GPIOF; break;
+    case GpioPort::portA: m_gpioPort = GPIOA; break;
+    case GpioPort::portB: m_gpioPort = GPIOB; break;
+    case GpioPort::portC: m_gpioPort = GPIOC; break;
+    case GpioPort::portF: m_gpioPort = GPIOF; break;
     default: break;
   }
 }
 
-void Gpio::setGpioBssrRegister(uint8_t t_value) const {
+void GpioBase::setBssrRegister(uint8_t t_value) const {
   // value << address
   switch (t_value)
   {
@@ -121,7 +97,7 @@ void Gpio::setGpioBssrRegister(uint8_t t_value) const {
   }
 }
 
-uint8_t Gpio::getGpioIdrRegister() const {
+uint8_t GpioBase::getIdrRegister() const {
   // register : IDR
   // value << address
   // value : 0x1 High
@@ -134,7 +110,7 @@ uint8_t Gpio::getGpioIdrRegister() const {
   }
 }
 
-void Gpio::setupGpioModeRegister() const {
+void GpioBase::setupModerRegister() const {
   // register : MODER
   // value << address
   // value : ~(0x3) = 0b00 clear the register
@@ -147,7 +123,7 @@ void Gpio::setupGpioModeRegister() const {
   m_gpioPort->MODER |= (uint8_t(m_cfg.mode) << (m_cfg.pin.pin * 2)); // Set
 }
 
-void Gpio::setupGpioPullRegister() const {
+void GpioBase::setupPupdrRegister() const {
   // register : PUPDR
   // value << address
   // value : ~(0x3) = 0b00 clear the register
@@ -160,7 +136,7 @@ void Gpio::setupGpioPullRegister() const {
   m_gpioPort->PUPDR |= (uint8_t(m_cfg.pull) << (m_cfg.pin.pin * 2)); // Set
 }
 
-void Gpio::setupGpioSpeedRegister() const {
+void GpioBase::setupOspeedrRegister() const {
   // register : OSPEEDR
   // value << address
   // value : ~(0x3) = 0b00 clear the register
@@ -172,7 +148,7 @@ void Gpio::setupGpioSpeedRegister() const {
   m_gpioPort->OSPEEDR |= (uint8_t(m_cfg.speed) << (m_cfg.pin.pin * 2)); // Set
 }
 
-void Gpio::setupGpioOutputTypeRegister() const {
+void GpioBase::setupOtyperRegister() const {
   // register : OTYPER
   // value << address
   // value : ~(0x1) = 0b0 clear the register
@@ -183,7 +159,7 @@ void Gpio::setupGpioOutputTypeRegister() const {
   m_gpioPort->OTYPER |= (uint8_t(m_cfg.otype) << m_cfg.pin.pin); // Set
 }
 
-void Gpio::setupGpioAlternateFunctionRegister() const {
+void GpioBase::setupAfrRegister() const {
   // register : AFR[2]
   // register AFR[0] : low register pin 0-7
   // register AFR[1] : high register pin 8-15
@@ -210,7 +186,7 @@ void Gpio::setupGpioAlternateFunctionRegister() const {
   }
 }
 
-void Gpio::setupGpioPortRegister() const {
+void GpioBase::setupGpioPortRegister() const {
   // register AHBENR
   // value << address
   // value : 0x0 = disable
