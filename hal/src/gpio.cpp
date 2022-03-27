@@ -23,6 +23,7 @@ void GpioBase::setupGpio(Pin t_pin, Mode t_mode, Pull t_pull, Speed t_speed, Out
         setupPupdrRegister();
         break;
       }
+
       case Mode::modeOutput: {
         setupModerRegister();
         setupOtyperRegister();
@@ -30,6 +31,7 @@ void GpioBase::setupGpio(Pin t_pin, Mode t_mode, Pull t_pull, Speed t_speed, Out
         setupPupdrRegister();
         break;
       }
+
       case Mode::modeAlternateFunction: {
         setupAfrRegister();
         setupOtyperRegister();
