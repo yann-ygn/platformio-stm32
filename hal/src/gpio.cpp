@@ -78,8 +78,7 @@ void GpioBase::getPortAddress() {
 
 void GpioBase::setBssrRegister(uint8_t t_value) const {
   // value << address
-  switch (t_value)
-  {
+  switch (t_value) {
     // 0x1 << pin
     // Set pin ON
     case 1: {
