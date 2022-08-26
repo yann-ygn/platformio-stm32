@@ -124,6 +124,7 @@ namespace hal {
                   afunction(AlternadeFunction::noAlternateFunction) {}
       };
 
+      /**
       GpioBase() = default;
 
       void setupGpio(Pin t_pin,
@@ -132,6 +133,11 @@ namespace hal {
                      Speed t_speed = Speed::speedLow,
                      OutputType t_otype = OutputType::outputTypeOd,
                      AlternadeFunction t_afunction = AlternadeFunction::noAlternateFunction);
+      **/
+
+     GpioBase();
+
+     virtual void setupGpio();
 
       /**
        * @brief Set the GPIO high
@@ -162,7 +168,7 @@ namespace hal {
        */
       uint8_t getState() const;
 
-    private:
+    protected:
       Config m_cfg;
 
       // Low level address of the GPIO bank
@@ -216,6 +222,13 @@ namespace hal {
        * @brief Enable the GPIO port
        */
       void setupGpioPortRegister() const;
+  };
+
+  class GpioOutputPP : public GpioBase {
+    public:
+      GpioOutputPP();
+
+      void setupGpio(Pin t_pin);
   };
 } // namespace hal
 

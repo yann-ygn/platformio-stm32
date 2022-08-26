@@ -37,7 +37,7 @@ namespace hal {
       void toggleLedState();
 
     protected:
-      Gpio m_gpio;
+      GpioOutputPP m_gpio;
       uint8_t m_ledState = 0;
   };
 

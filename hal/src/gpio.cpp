@@ -2,6 +2,7 @@
 
 using namespace hal;
 
+/**
 void GpioBase::setupGpio(Pin t_pin, Mode t_mode, Pull t_pull, Speed t_speed, OutputType t_otype, AlternadeFunction t_afunction) {
   // Populate the config object
   m_cfg.pin = t_pin;
@@ -45,6 +46,7 @@ void GpioBase::setupGpio(Pin t_pin, Mode t_mode, Pull t_pull, Speed t_speed, Out
     }
   }
 }
+**/
 
 void GpioBase::setState(uint8_t t_state) const {
   setBssrRegister(t_state);
@@ -211,4 +213,17 @@ void GpioBase::setupGpioPortRegister() const {
       }
     }
   #endif
+}
+
+void GpioOutputPP::setupGpio(Pin t_pin) {
+  m_cfg.pin = t_pin;
+  m_cfg.mode = Mode::modeOutput;
+  m_cfg.otype = OutputType::outputTypePp;
+
+  if (m_cfg.pin.isValid()) {
+    getPortAddress();
+    setupGpioPortRegister();
+    setupModerRegister();
+    setupOtyperRegister();
+  }
 }
