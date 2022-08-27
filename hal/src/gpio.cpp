@@ -215,15 +215,45 @@ void GpioBase::setupGpioPortRegister() const {
   #endif
 }
 
-void GpioOutputPP::setupGpio(Pin t_pin) {
+GpioOutput::GpioOutput(Pin t_pin, OutputType t_otype = OutputType::outputTypeOd, Speed t_speed = Speed::speedLow) {
   m_cfg.pin = t_pin;
-  m_cfg.mode = Mode::modeOutput;
-  m_cfg.otype = OutputType::outputTypePp;
+  m_cfg.otype = t_otype;
+  m_cfg.speed = t_speed;
+}
+
+void GpioOutput::setupGpio() {
 
   if (m_cfg.pin.isValid()) {
     getPortAddress();
     setupGpioPortRegister();
     setupModerRegister();
     setupOtyperRegister();
+    setupOspeedrRegister();
+  }
+}
+
+void GpioInputPU::setupGpio(Pin t_pin) {
+  m_cfg.pin = t_pin;
+  m_cfg.mode = Mode::modeInput;
+  m_cfg.pull = Pull::pullUp;
+
+  if (m_cfg.pin.isValid()) {
+    getPortAddress();
+    setupGpioPortRegister();
+    setupModerRegister();
+    setupPupdrRegister();
+  }
+}
+
+void GpioInputPD::setupGpio(Pin t_pin) {
+  m_cfg.pin = t_pin;
+  m_cfg.mode = Mode::modeInput;
+  m_cfg.pull = Pull::pullDown;
+
+  if (m_cfg.pin.isValid()) {
+    getPortAddress();
+    setupGpioPortRegister();
+    setupModerRegister();
+    setupPupdrRegister();
   }
 }

@@ -135,9 +135,7 @@ namespace hal {
                      AlternadeFunction t_afunction = AlternadeFunction::noAlternateFunction);
       **/
 
-     GpioBase();
-
-     virtual void setupGpio();
+     virtual void setupGpio() = 0;
 
       /**
        * @brief Set the GPIO high
@@ -224,11 +222,30 @@ namespace hal {
       void setupGpioPortRegister() const;
   };
 
-  class GpioOutputPP : public GpioBase {
+  class GpioOutput : public GpioBase {
     public:
-      GpioOutputPP();
+    GpioOutput(Pin t_pin, OutputType t_otype = OutputType::outputTypeOd, Speed t_speed = Speed::speedLow);
 
-      void setupGpio(Pin t_pin);
+      void setupGpio();
+  };
+
+  class GpioInput : public GpioBase {
+    public:
+      GpioInput();
+  };
+
+  class GpioInputPU : public GpioBase {
+    public:
+      GpioInputPU(Pin t_pin);
+
+      void setupGpio();
+  };
+
+  class GpioInputPD : public GpioBase {
+    public:
+      GpioInputPD(Pin t_pin);
+
+      void setupGpio();
   };
 } // namespace hal
 

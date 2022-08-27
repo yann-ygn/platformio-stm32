@@ -3,14 +3,12 @@
 using namespace hal;
 
 void TemporarySwitch::setupTempSwitch(Pin t_pin, uint16_t t_period) {
-  m_gpio.setupGpio(t_pin,
-                   Gpio::Config::Mode::modeInput,
-                   Gpio::Config::Pull::pullPullUp);
+  m_gpio.setupGpio(t_pin);
 }
 
 
 void TemporarySwitch::pollTempSwitch() {
-  m_tempSwitchState = m_gpio.getGpioState();
+  m_tempSwitchState = m_gpio.getState();
   m_now = System::getNow();
 
   if (m_tempSwitchState == m_lasttempswithState) {

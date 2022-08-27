@@ -1,4 +1,4 @@
-#include "uart.hpp"
+/**#include "uart.hpp"
 
 using namespace hal;
 
@@ -140,3 +140,4 @@ uint32_t Usart::getUsartRxneRegister() const {
 uint8_t Usart::getUsartRdrRegister() const {
   return m_usartPeriph->RDR;
 }
+**/

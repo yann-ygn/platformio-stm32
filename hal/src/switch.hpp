@@ -26,7 +26,7 @@ namespace hal {
       bool isLongPressed();
 
     private:
-      Gpio m_gpio;
+      GpioInputPU m_gpio;
 
       uint8_t m_tempSwitchState = 0;
       uint8_t m_rawState = 0;
