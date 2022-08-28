@@ -9,9 +9,9 @@
 namespace hal {
   class TemporarySwitch {
     public:
-      TemporarySwitch() = default;
+      TemporarySwitch(const Pin& t_pin) : m_gpio(t_pin, GpioBase::Pull::pullUp) {}
 
-      void setupTempSwitch(Pin t_pin, uint16_t t_period);
+      void setupTempSwitch(uint16_t t_period);
 
       void pollTempSwitch();
 
@@ -26,7 +26,7 @@ namespace hal {
       bool isLongPressed();
 
     private:
-      GpioInputPU m_gpio;
+      GpioInput m_gpio;
 
       uint8_t m_tempSwitchState = 0;
       uint8_t m_rawState = 0;

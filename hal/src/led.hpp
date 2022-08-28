@@ -12,14 +12,14 @@ namespace hal {
    */
   class Led {
     public:
-      Led() = default;
+      Led(const Pin& t_pin) : m_gpio(t_pin, GpioBase::OutputType::outputTypePp) {}
 
       /**
        * @brief Initialize the GPIO
        *
        * @param t_pin Pin # object
        */
-      virtual void setupLed(Pin t_pin);
+      virtual void setupLed();
 
       /**
        * @brief Turn the LED on
@@ -36,16 +36,6 @@ namespace hal {
        */
       void toggleLedState();
 
-    protected:
-      GpioOutputPP m_gpio;
-      uint8_t m_ledState = 0;
-  };
-
-  /**
-   * @brief An LED that can also blink!
-   */
-  class BlinkingLed : public Led {
-    public:
       /**
        * @brief Blink the LED
        *
@@ -53,7 +43,9 @@ namespace hal {
        */
       void blinkLed(uint16_t t_period);
 
-    private:
+    protected:
+      GpioOutput m_gpio;
+      uint8_t m_ledState = 0;
       uint32_t m_now = 0;
       uint32_t m_lastBlinkTime = 0;
       uint32_t m_lastBlinkState = 0;

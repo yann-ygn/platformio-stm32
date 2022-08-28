@@ -125,17 +125,9 @@ namespace hal {
       };
 
       /**
-      GpioBase() = default;
-
-      void setupGpio(Pin t_pin,
-                     Mode t_mode = Mode::modeInput,
-                     Pull t_pull = Pull::noPull,
-                     Speed t_speed = Speed::speedLow,
-                     OutputType t_otype = OutputType::outputTypeOd,
-                     AlternadeFunction t_afunction = AlternadeFunction::noAlternateFunction);
-      **/
-
-     virtual void setupGpio() = 0;
+       * @brief 
+       */
+      virtual void setupGpio() = 0;
 
       /**
        * @brief Set the GPIO high
@@ -164,7 +156,7 @@ namespace hal {
        *
        * @return uint8_t 1 : high | 0 : low
        */
-      uint8_t getState() const;
+        uint8_t getState() const;
 
     protected:
       Config m_cfg;
@@ -224,28 +216,24 @@ namespace hal {
 
   class GpioOutput : public GpioBase {
     public:
-    GpioOutput(Pin t_pin, OutputType t_otype = OutputType::outputTypeOd, Speed t_speed = Speed::speedLow);
+      GpioOutput(const Pin& t_pin, OutputType t_otype = OutputType::outputTypeOd, Speed t_speed = Speed::speedLow);
 
       void setupGpio();
   };
 
   class GpioInput : public GpioBase {
     public:
-      GpioInput();
-  };
-
-  class GpioInputPU : public GpioBase {
-    public:
-      GpioInputPU(Pin t_pin);
+      GpioInput(const Pin& t_pin, Pull t_pull = Pull::noPull);
 
       void setupGpio();
   };
 
-  class GpioInputPD : public GpioBase {
+  class GpioAlternateFunction : public GpioBase {
     public:
-      GpioInputPD(Pin t_pin);
+      GpioAlternateFunction(const Pin& t_pin, AlternadeFunction t_afunction = AlternadeFunction::noAlternateFunction, OutputType t_otype = OutputType::outputTypeOd, Pull t_pull = Pull::noPull, Speed t_speed = Speed::speedLow);
 
       void setupGpio();
+      void setAlternateFunction();
   };
 } // namespace hal
 

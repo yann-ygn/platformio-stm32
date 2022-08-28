@@ -215,14 +215,14 @@ void GpioBase::setupGpioPortRegister() const {
   #endif
 }
 
-GpioOutput::GpioOutput(Pin t_pin, OutputType t_otype = OutputType::outputTypeOd, Speed t_speed = Speed::speedLow) {
+GpioOutput::GpioOutput(const Pin& t_pin, OutputType t_otype, Speed t_speed) {
   m_cfg.pin = t_pin;
+  m_cfg.mode = Mode::modeOutput;
   m_cfg.otype = t_otype;
   m_cfg.speed = t_speed;
 }
 
 void GpioOutput::setupGpio() {
-
   if (m_cfg.pin.isValid()) {
     getPortAddress();
     setupGpioPortRegister();
@@ -232,11 +232,13 @@ void GpioOutput::setupGpio() {
   }
 }
 
-void GpioInputPU::setupGpio(Pin t_pin) {
+GpioInput::GpioInput(const Pin& t_pin, Pull t_pull) {
   m_cfg.pin = t_pin;
   m_cfg.mode = Mode::modeInput;
-  m_cfg.pull = Pull::pullUp;
+  m_cfg.pull = t_pull;
+}
 
+void GpioInput::setupGpio() {
   if (m_cfg.pin.isValid()) {
     getPortAddress();
     setupGpioPortRegister();
@@ -245,15 +247,21 @@ void GpioInputPU::setupGpio(Pin t_pin) {
   }
 }
 
-void GpioInputPD::setupGpio(Pin t_pin) {
+GpioAlternateFunction::GpioAlternateFunction(const Pin& t_pin, AlternadeFunction t_afunction, OutputType t_otype, Pull t_pull, Speed t_speed) {
   m_cfg.pin = t_pin;
-  m_cfg.mode = Mode::modeInput;
-  m_cfg.pull = Pull::pullDown;
+  m_cfg.afunction = t_afunction;
+  m_cfg.pull = t_pull;
+  m_cfg.otype = t_otype;
+  m_cfg.speed = t_speed;
+  m_cfg.mode = Mode::modeAlternateFunction;
+}
 
+void GpioAlternateFunction::setupGpio() {
   if (m_cfg.pin.isValid()) {
-    getPortAddress();
-    setupGpioPortRegister();
-    setupModerRegister();
-    setupPupdrRegister();
+        setupAfrRegister();
+        setupOtyperRegister();
+        setupOspeedrRegister();
+        setupPupdrRegister();
+        setupModerRegister();
   }
 }

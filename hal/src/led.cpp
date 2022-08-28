@@ -2,9 +2,8 @@
 
 using namespace hal;
 
-void Led::setupLed(Pin t_pin) {
-  m_gpio.setupGpio(t_pin);
-
+void Led::setupLed() {
+  m_gpio.setupGpio();
   m_gpio.setState(m_ledState);
 }
 
@@ -23,7 +22,7 @@ void Led::toggleLedState() {
   m_gpio.setState(m_ledState);
 }
 
-void BlinkingLed::blinkLed(uint16_t t_period) {
+void Led::blinkLed(uint16_t t_period) {
   m_now = System::getNow();
 
   if ((m_now - m_lastBlinkTime) > t_period)

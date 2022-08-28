@@ -1,7 +1,7 @@
-/**#include "uart.hpp"
+#include "uart.hpp"
 
 using namespace hal;
-
+/**
 void Usart::setupUsart(Pin t_txPin,
                        Pin t_rxPin,
                        Config::Periph t_periph,
@@ -65,23 +65,12 @@ void Usart::setupUsart(Pin t_txPin,
     default: break;
   }
 }
-
-bool UsartPolling::isDataAvailable() const {
-  return (getUsartRxneRegister() & 0x20);
-}
-
-void UsartPolling::printUsart(uint8_t t_data) const {
-  m_usartPeriph->TDR = t_data;
-}
-
-uint8_t UsartPolling::readUsart() const {
-  return getUsartRdrRegister();
-}
+**/
 
 void Usart::getUsartPeriphAddress() {
   switch (m_cfg.periph)
   {
-    case Config::Periph::Usart1: m_usartPeriph = USART1; break;
+    case Periph::Usart1: m_usartPeriph = USART1; break;
 
     default: break;
   }
@@ -95,7 +84,7 @@ void Usart::enableUsartPeriph() const {
   // address : 1 << 14 (0x4000) = USART1EN = Enable USART1
   switch (m_cfg.periph)
   {
-    case Config::Periph::Usart1: RCC->APB2ENR |= RCC_APB2ENR_USART1EN; break;
+    case Periph::Usart1: RCC->APB2ENR |= RCC_APB2ENR_USART1EN; break;
 
     default: break;
   }
@@ -140,4 +129,15 @@ uint32_t Usart::getUsartRxneRegister() const {
 uint8_t Usart::getUsartRdrRegister() const {
   return m_usartPeriph->RDR;
 }
-**/
+
+bool UsartPolling::isDataAvailable() const {
+  return (getUsartRxneRegister() & 0x20);
+}
+
+void UsartPolling::printUsart(uint8_t t_data) const {
+  m_usartPeriph->TDR = t_data;
+}
+
+uint8_t UsartPolling::readUsart() const {
+  return getUsartRdrRegister();
+}

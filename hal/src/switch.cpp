@@ -2,8 +2,9 @@
 
 using namespace hal;
 
-void TemporarySwitch::setupTempSwitch(Pin t_pin, uint16_t t_period) {
-  m_gpio.setupGpio(t_pin);
+void TemporarySwitch::setupTempSwitch(uint16_t t_period) {
+  m_longPressPeriod = t_period;
+  m_gpio.setupGpio();
 }
 
 
