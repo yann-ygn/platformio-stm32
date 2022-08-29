@@ -126,6 +126,27 @@ uint32_t Usart::getUsartRxneRegister() const {
   return m_usartPeriph->ISR & USART_ISR_RXNE;
 }
 
+void UsartPolling::setupUsart(Periph t_perih, Mode t_mode, BaudRate t_baud) {
+  m_cfg.periph = t_perih;
+  m_cfg.mode = t_mode;
+  m_cfg.baud = t_baud;
+
+  getUsartPeriphAddress();
+  enableUsartPeriph();
+
+  switch (m_cfg.baud)
+  {
+    case BaudRate::BaudRate9600: {
+      uint16_t baudRate = ((System::getSysClockFrequency()) / 9600);
+      setUsartBrrRegister(baudRate);
+      break;
+    }
+
+    default:
+      break;
+  }
+}
+
 uint8_t Usart::getUsartRdrRegister() const {
   return m_usartPeriph->RDR;
 }

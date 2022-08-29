@@ -40,8 +40,6 @@ namespace hal {
        * @brief Holds the configuration of the USART peripheral
        */
       struct Config {
-        Pin txpin;
-        Pin rxpin;
         Periph periph;
         Mode mode;
         BaudRate baud;
@@ -49,15 +47,10 @@ namespace hal {
         /**
          * @brief Constructor with no arguments defines an invalid USART object
          */
-        Config() : txpin(),
-                  rxpin(),
-                  periph(Periph::Usart1),
-                  baud(BaudRate::BaudRate9600) {}
+        Config() : periph(Periph::Usart1),
+                   mode(Mode::Bidirectionnal),
+                   baud(BaudRate::BaudRate9600) {}
       };
-
-      Usart(const Pin& t_txpin, const Pin& t_rxpin) : m_gpioTx(t_txpin, GpioBase::AlternadeFunction::noAlternateFunction, GpioBase::OutputType::outputTypePp),
-                                                      m_gpioRx(t_txpin, GpioBase::AlternadeFunction::noAlternateFunction, GpioBase::OutputType::outputTypePp) {}
-      //Usart() = default;
 
       virtual void setupUsart();
 
@@ -68,6 +61,9 @@ namespace hal {
       USART_TypeDef *m_usartPeriph = nullptr;
       GpioAlternateFunction m_gpioTx;
       GpioAlternateFunction m_gpioRx;
+
+      Usart(const Pin& t_txpin, const Pin& t_rxpin) : m_gpioTx(t_txpin, GpioBase::AlternadeFunction::noAlternateFunction, GpioBase::OutputType::outputTypePp),
+                                                      m_gpioRx(t_txpin, GpioBase::AlternadeFunction::noAlternateFunction, GpioBase::OutputType::outputTypePp) {}
 
       void getUsartPeriphAddress();
 
@@ -93,7 +89,9 @@ namespace hal {
 
   class UsartPolling : public Usart {
     public:
-      void setupUsart();
+      UsartPolling(const Pin& t_txpin, const Pin& t_rxpin) : Usart(t_txpin, t_rxpin) {}
+
+      void setupUsart(Periph t_perih, Mode t_mode, BaudRate t_baud);
 
       bool isDataAvailable() const;
 
