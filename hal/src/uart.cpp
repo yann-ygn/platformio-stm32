@@ -126,11 +126,7 @@ uint32_t Usart::getUsartRxneRegister() const {
   return m_usartPeriph->ISR & USART_ISR_RXNE;
 }
 
-void UsartPolling::setupUsart(Periph t_perih, Mode t_mode, BaudRate t_baud) {
-  m_cfg.periph = t_perih;
-  m_cfg.mode = t_mode;
-  m_cfg.baud = t_baud;
-
+void UsartPolling::setupUsart() {
   getUsartPeriphAddress();
   enableUsartPeriph();
 

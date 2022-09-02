@@ -47,23 +47,37 @@ namespace hal {
         /**
          * @brief Constructor with no arguments defines an invalid USART object
          */
-        Config() : periph(Periph::Usart1),
-                   mode(Mode::Bidirectionnal),
-                   baud(BaudRate::BaudRate9600) {}
+        Config() :
+          periph(Periph::Usart1),
+          mode(Mode::Bidirectionnal),
+          baud(BaudRate::BaudRate9600) {}
+
+        Config(Periph t_periph, Mode t_mode, BaudRate t_baud) :
+          periph(t_periph),
+          mode(t_mode),
+          baud(t_baud) {}
       };
 
-      virtual void setupUsart();
+      virtual void setupUsart() = 0;
 
     protected:
-      Config m_cfg;
       CircBuff<uint8_t, 255> m_buffer;
 
       USART_TypeDef *m_usartPeriph = nullptr;
+
       GpioAlternateFunction m_gpioTx;
       GpioAlternateFunction m_gpioRx;
 
-      Usart(const Pin& t_txpin, const Pin& t_rxpin) : m_gpioTx(t_txpin, GpioBase::AlternadeFunction::noAlternateFunction, GpioBase::OutputType::outputTypePp),
-                                                      m_gpioRx(t_txpin, GpioBase::AlternadeFunction::noAlternateFunction, GpioBase::OutputType::outputTypePp) {}
+      Config m_cfg;
+
+      //Usart(const Pin& t_txpin, const Pin& t_rxpin) :
+      //  m_gpioTx(t_txpin, GpioBase::AlternadeFunction::noAlternateFunction, GpioBase::OutputType::outputTypePp),
+      //  m_gpioRx(t_txpin, GpioBase::AlternadeFunction::noAlternateFunction, GpioBase::OutputType::outputTypePp) {}
+
+      Usart(const Pin& t_txpin, const Pin& t_rxpin, Periph t_periph, Mode t_mode, BaudRate t_baud) :
+        m_gpioTx(t_txpin, GpioBase::AlternadeFunction::noAlternateFunction, GpioBase::OutputType::outputTypePp),
+        m_gpioRx(t_txpin, GpioBase::AlternadeFunction::noAlternateFunction, GpioBase::OutputType::outputTypePp),
+        m_cfg(t_periph, t_mode, t_baud) {}
 
       void getUsartPeriphAddress();
 
@@ -89,9 +103,10 @@ namespace hal {
 
   class UsartPolling : public Usart {
     public:
-      UsartPolling(const Pin& t_txpin, const Pin& t_rxpin) : Usart(t_txpin, t_rxpin) {}
+      UsartPolling(const Pin& t_txpin, const Pin& t_rxpin, Periph t_periph, Mode t_mode, BaudRate t_baud) :
+        Usart(t_txpin, t_rxpin, t_periph, t_mode, t_baud) {}
 
-      void setupUsart(Periph t_perih, Mode t_mode, BaudRate t_baud);
+      void setupUsart();
 
       bool isDataAvailable() const;
 
