@@ -32,8 +32,8 @@ namespace hal {
       /**
        * @brief UART baud rate
        */
-      enum class BaudRate {
-        BaudRate9600,
+      enum class BaudRate : uint32_t {
+        BaudRate9600 = 9600,
       };
 
       /**
@@ -63,7 +63,7 @@ namespace hal {
     protected:
       CircBuff<uint8_t, 255> m_buffer;
 
-      USART_TypeDef *m_usartPeriph = nullptr;
+      USART_TypeDef* m_usartPeriph = nullptr;
 
       GpioAlternateFunction m_gpioTx;
       GpioAlternateFunction m_gpioRx;
@@ -89,7 +89,7 @@ namespace hal {
 
       void enableUsartRx() const;
 
-      void setUsartBrrRegister(uint16_t value) const;
+      void setUsartBrrRegister(uint32_t value) const;
 
       /**
        * @brief Read the RX Not Empty register
@@ -101,9 +101,9 @@ namespace hal {
       uint8_t getUsartRdrRegister() const;
   };
 
-  class UsartPolling : public Usart {
+  class UsartBlocking : public Usart {
     public:
-      UsartPolling(const Pin& t_txpin, const Pin& t_rxpin, Periph t_periph, Mode t_mode, BaudRate t_baud) :
+      UsartBlocking(const Pin& t_txpin, const Pin& t_rxpin, Periph t_periph, Mode t_mode, BaudRate t_baud) :
         Usart(t_txpin, t_rxpin, t_periph, t_mode, t_baud) {}
 
       void setupUsart();

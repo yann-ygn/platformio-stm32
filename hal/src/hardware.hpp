@@ -6,7 +6,7 @@
 #include "gpio.hpp"
 #include "led.hpp"
 #include "switch.hpp"
-//#include "uart.hpp"
+#include "uart.hpp"
 #include "circbuff.hpp"
 #include "interrupts.hpp"
 

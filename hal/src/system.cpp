@@ -5,7 +5,7 @@ using namespace hal;
 extern "C" {
   // Systick interrupt handler
   void SysTick_Handler(void) {
-    hal::System::incrementSystickCounter();
+    System::incrementSystickCounter();
   }
 }
 

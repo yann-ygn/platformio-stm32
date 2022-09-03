@@ -1,5 +1,4 @@
-#ifndef HAL_CIRCBUFF_H_
-#define HAL_CIRCBUFF_H_
+#pragma once
 
 #include <cstdint>
 #include <cstddef>
@@ -22,16 +21,14 @@ namespace hal {
       }
 
       T getItem() {
-        if (isEmpty())
+        if (! isEmpty())
         {
-          return T();
+          T data = m_buffer[m_tail];
+          m_full = false;
+          m_tail = (m_tail + 1) % m_maxSize;
+
+          return data;
         }
-
-        T data = m_buffer[m_tail];
-        m_full = false;
-        m_tail = (m_tail + 1) % m_maxSize;
-
-        return data;
       }
 
       bool isEmpty() const {
@@ -69,5 +66,3 @@ namespace hal {
       bool m_full = false;
   };
 }
-
-#endif

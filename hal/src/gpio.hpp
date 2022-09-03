@@ -1,5 +1,4 @@
-#ifndef HAL_GPIO_H_
-#define HAL_GPIO_H_
+#pragma once
 
 #include <cstdint>
 
@@ -162,7 +161,7 @@ namespace hal {
       Config m_cfg;
 
       // Low level address of the GPIO bank
-      GPIO_TypeDef *m_gpioPort = nullptr;
+      GPIO_TypeDef* m_gpioPort = nullptr;
 
       /**
        * @brief Set the bit set/reset register to turn the gpio high/low
@@ -233,8 +232,6 @@ namespace hal {
       GpioAlternateFunction(const Pin& t_pin, AlternadeFunction t_afunction = AlternadeFunction::noAlternateFunction, OutputType t_otype = OutputType::outputTypeOd, Pull t_pull = Pull::noPull, Speed t_speed = Speed::speedLow);
 
       void setupGpio();
-      void setAlternateFunction();
+      void setAlternateFunction(AlternadeFunction t_afunction);
   };
 } // namespace hal
-
-#endif  // HAL_GPIO_H_

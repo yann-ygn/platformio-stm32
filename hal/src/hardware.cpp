@@ -6,7 +6,7 @@ const size_t buffsize = 50;
 
 hal::System system0;
 hal::Led led0(D13);
-//hal::UsartPolling serial0;
+hal::UsartBlocking serial0(TX, RX, hal::UsartBlocking::Periph::Usart1, hal::UsartBlocking::Mode::Bidirectionnal, hal::UsartBlocking::BaudRate::BaudRate9600);
 hal::TemporarySwitch switch0(D6);
 hal::CircBuff<uint8_t, 255> circbuff;
 
@@ -22,10 +22,7 @@ void Hardware::setupTestStuff() {
   led0.setupLed();
   switch0.setupTempSwitch(1000);
   led0.turnLedOn();
-  /**serial0.setupUsart(hardware::TX, hardware::RX,
-                    hal::Usart::Config::Periph::Usart1,
-                    hal::Usart::Config::Mode::Bidirectionnal,
-                    hal::Usart::Config::BaudRate::BaudRate9600);**/
+  serial0.setupUsart();
   //hal::ExtiInterrupts.setupExternalInterrupt(D6, hal::InterruptTrigger::interruptTriggerFalling, 0, testInterrupt);
 }
 
@@ -33,7 +30,7 @@ void Hardware::doTestStuff() {
   switch0.pollTempSwitch();
   if (switch0.isPushed()) {
     led0.toggleLedState();
-    //serial0.printUsart(97);
+    serial0.printUsart(97);
   }
   /**
   if (serial0.isDataAvailable()) {

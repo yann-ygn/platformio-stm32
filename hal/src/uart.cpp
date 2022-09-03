@@ -114,7 +114,7 @@ void Usart::enableUsartRx() const {
   m_usartPeriph->CR1 |= USART_CR1_RE;
 }
 
-void Usart::setUsartBrrRegister(uint16_t value) const {
+void Usart::setUsartBrrRegister(uint32_t value) const {
   // Register : BRR
   // value
   m_usartPeriph->BRR = value;
@@ -126,20 +126,22 @@ uint32_t Usart::getUsartRxneRegister() const {
   return m_usartPeriph->ISR & USART_ISR_RXNE;
 }
 
-void UsartPolling::setupUsart() {
+void UsartBlocking::setupUsart() {
   getUsartPeriphAddress();
   enableUsartPeriph();
+  setUsartBrrRegister(System::getSysClockFrequency() / (uint32_t)m_cfg.baud);
+  enableUsart();
 
-  switch (m_cfg.baud)
-  {
-    case BaudRate::BaudRate9600: {
-      uint16_t baudRate = ((System::getSysClockFrequency()) / 9600);
-      setUsartBrrRegister(baudRate);
-      break;
-    }
+  if (m_cfg.mode == Mode::RxOnly || m_cfg.mode == Mode::Bidirectionnal) {
+    m_gpioRx.setAlternateFunction(GpioAlternateFunction::AlternadeFunction::alternateFunction1);
+    m_gpioRx.setupGpio();
+    enableUsartRx();
+  }
 
-    default:
-      break;
+  if (m_cfg.mode == Mode::TxOnly || m_cfg.mode == Mode::Bidirectionnal) {
+    m_gpioTx.setAlternateFunction(GpioAlternateFunction::AlternadeFunction::alternateFunction1);
+    m_gpioTx.setupGpio();
+    enableUsartTx();
   }
 }
 
@@ -147,14 +149,14 @@ uint8_t Usart::getUsartRdrRegister() const {
   return m_usartPeriph->RDR;
 }
 
-bool UsartPolling::isDataAvailable() const {
+bool UsartBlocking::isDataAvailable() const {
   return (getUsartRxneRegister() & 0x20);
 }
 
-void UsartPolling::printUsart(uint8_t t_data) const {
+void UsartBlocking::printUsart(uint8_t t_data) const {
   m_usartPeriph->TDR = t_data;
 }
 
-uint8_t UsartPolling::readUsart() const {
+uint8_t UsartBlocking::readUsart() const {
   return getUsartRdrRegister();
 }

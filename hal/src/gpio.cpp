@@ -258,10 +258,16 @@ GpioAlternateFunction::GpioAlternateFunction(const Pin& t_pin, AlternadeFunction
 
 void GpioAlternateFunction::setupGpio() {
   if (m_cfg.pin.isValid()) {
-        setupAfrRegister();
-        setupOtyperRegister();
-        setupOspeedrRegister();
-        setupPupdrRegister();
-        setupModerRegister();
+    getPortAddress();
+    setupGpioPortRegister();
+    setupAfrRegister();
+    setupOtyperRegister();
+    setupOspeedrRegister();
+    setupPupdrRegister();
+    setupModerRegister();
   }
+}
+
+void GpioAlternateFunction::setAlternateFunction(AlternadeFunction t_afunction) {
+  m_cfg.afunction = t_afunction;
 }
