@@ -61,8 +61,6 @@ namespace hal {
       virtual void setupUsart() = 0;
 
     protected:
-      CircBuff<uint8_t, 255> m_buffer;
-
       USART_TypeDef* m_usartPeriph = nullptr;
 
       GpioAlternateFunction m_gpioTx;
