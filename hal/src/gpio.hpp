@@ -116,11 +116,11 @@ namespace hal {
          * @brief Constructor with no arguments defines an invalid pin set to input with no pullup
          */
         Config() : pin(),
-                  mode(Mode::modeInput),
-                  pull(Pull::noPull),
-                  speed(Speed::speedLow),
-                  otype(OutputType::outputTypeOd),
-                  afunction(AlternadeFunction::noAlternateFunction) {}
+          mode(Mode::modeInput),
+          pull(Pull::noPull),
+          speed(Speed::speedLow),
+          otype(OutputType::outputTypeOd),
+          afunction(AlternadeFunction::noAlternateFunction) {}
       };
 
       /**

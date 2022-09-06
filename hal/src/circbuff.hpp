@@ -3,11 +3,11 @@
 #include <cstdint>
 #include <cstddef>
 
-namespace hal {
+namespace utils {
   template <typename T, size_t S>
   class CircBuff {
     public:
-      explicit CircBuff() = default;
+      CircBuff() = default;
 
       void putItem(T t_item) {
         m_buffer[m_head] = t_item;

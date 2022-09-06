@@ -8,7 +8,7 @@ hal::System system0;
 hal::Led led0(D13);
 hal::UsartBlocking serial0(TX, RX, hal::UsartBlocking::Periph::Usart1, hal::UsartBlocking::Mode::Bidirectionnal, hal::UsartBlocking::BaudRate::BaudRate9600);
 hal::TemporarySwitch switch0(D6);
-hal::CircBuff<uint8_t, 255> circbuff;
+//hal::CircBuff<uint8_t, 255> circbuff;
 
 void testInterrupt() {
   led0.toggleLedState();

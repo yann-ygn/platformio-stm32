@@ -129,7 +129,7 @@ uint32_t Usart::getUsartRxneRegister() const {
 void UsartBlocking::setupUsart() {
   getUsartPeriphAddress();
   enableUsartPeriph();
-  setUsartBrrRegister(System::getSysClockFrequency() / (uint32_t)m_cfg.baud);
+  setUsartBrrRegister(System::getSysClockFrequency() / uint32_t(m_cfg.baud));
   enableUsart();
 
   if (m_cfg.mode == Mode::RxOnly || m_cfg.mode == Mode::Bidirectionnal) {

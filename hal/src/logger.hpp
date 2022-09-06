@@ -4,9 +4,9 @@
 #include "circbuff.hpp"
 #include "uart.hpp"
 
-namespace hal
+namespace utils
 {
-  class Logger {
+  class LoggerUsart {
     public:
       enum class LogLevel {
         LogLevelTrace,
@@ -15,10 +15,16 @@ namespace hal
         LogLevelAction,
       };
 
-      Logger() = default;
+      enum class LogType {
+        LogTypeMessage,
+        LogTypeAction,
+      };
 
-      void log()
-    protected:
-      CircBuff<uint8_t, 128> m_buffer;
+      static void setupLoggerUsart(hal::UsartBlocking* t_usart, LogLevel t_loglevel);
+
+    private:
+      static CircBuff<uint8_t, 128> m_buffer;
+      static hal::UsartBlocking* m_usart;
+      static uint8_t m_logLevel;
   };
 } // namespace hal
