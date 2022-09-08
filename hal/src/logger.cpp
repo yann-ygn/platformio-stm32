@@ -3,8 +3,9 @@
 using namespace utils;
 
 hal::UsartBlocking* LoggerUsart::m_usart = nullptr;
-uint8_t LoggerUsart::m_logLevel = 0;
+LoggerUsart::LogLevel LoggerUsart::m_logLevel = LogLevel::LogLevelTrace;
 
 void LoggerUsart::setupLoggerUsart(hal::UsartBlocking* t_usart, LogLevel t_loglevel) {
-
+    m_usart = t_usart;
+    m_logLevel = t_loglevel;
 }

@@ -4,8 +4,7 @@
 #include "circbuff.hpp"
 #include "uart.hpp"
 
-namespace utils
-{
+namespace utils {
   class LoggerUsart {
     public:
       enum class LogLevel {
@@ -25,6 +24,6 @@ namespace utils
     private:
       static CircBuff<uint8_t, 128> m_buffer;
       static hal::UsartBlocking* m_usart;
-      static uint8_t m_logLevel;
+      static LogLevel m_logLevel;
   };
-} // namespace hal
+} // namespace utils
