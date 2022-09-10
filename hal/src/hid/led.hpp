@@ -3,8 +3,8 @@
 
 #include <cstdint>
 
-#include "gpio.hpp"
-#include "system.hpp"
+#include "per/gpio.hpp"
+#include "sys/system.hpp"
 
 namespace hal {
   /**

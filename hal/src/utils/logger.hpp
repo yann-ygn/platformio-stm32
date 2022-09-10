@@ -2,7 +2,7 @@
 
 #include "cstdint"
 #include "circbuff.hpp"
-#include "uart.hpp"
+#include "per/uart.hpp"
 
 namespace utils {
   class LoggerUsart {

@@ -2,13 +2,14 @@
 #define HAL_HARDWARE_H_
 
 #include <cstdint>
-#include "system.hpp"
-#include "gpio.hpp"
-#include "led.hpp"
-#include "switch.hpp"
-#include "uart.hpp"
-#include "circbuff.hpp"
-#include "interrupts.hpp"
+
+#include "sys/system.hpp"
+#include "sys/interrupts.hpp"
+#include "per/gpio.hpp"
+#include "per/uart.hpp"
+#include "hid/led.hpp"
+#include "hid/switch.hpp"
+#include "utils/circbuff.hpp"
 
 namespace hardware {
   // Pins definitions

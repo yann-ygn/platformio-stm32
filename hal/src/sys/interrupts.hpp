@@ -5,7 +5,7 @@
 
 #include "stm32f031x6.h"
 
-#include "gpio.hpp"
+#include "per/gpio.hpp"
 
 namespace hal
 {

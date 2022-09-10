@@ -4,7 +4,7 @@
 
 #include "stm32f031x6.h"
 
-#include "system.hpp"
+#include "sys/system.hpp"
 #include "gpio.hpp"
 
 namespace hal {
