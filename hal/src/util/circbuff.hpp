@@ -3,7 +3,7 @@
 #include <cstdint>
 #include <cstddef>
 
-namespace utils {
+namespace util {
   template <typename T, size_t S>
   class CircBuff {
     public:

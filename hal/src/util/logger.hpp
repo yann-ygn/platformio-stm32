@@ -4,7 +4,7 @@
 #include "circbuff.hpp"
 #include "per/uart.hpp"
 
-namespace utils {
+namespace util {
   class LoggerUsart {
     public:
       enum class LogLevel {

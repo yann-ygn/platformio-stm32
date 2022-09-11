@@ -9,7 +9,7 @@
 #include "per/uart.hpp"
 #include "hid/led.hpp"
 #include "hid/switch.hpp"
-#include "utils/circbuff.hpp"
+#include "util/circbuff.hpp"
 
 namespace hardware {
   // Pins definitions

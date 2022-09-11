@@ -6,7 +6,7 @@
 #include "stm32f031x6.h"
 #include "sys/system.hpp"
 #include "gpio.hpp"
-#include "utils/circbuff.hpp"
+#include "util/circbuff.hpp"
 
 
 namespace hal {

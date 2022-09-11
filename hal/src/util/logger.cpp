@@ -1,6 +1,6 @@
 #include "logger.hpp"
 
-using namespace utils;
+using namespace util;
 
 hal::UsartBlocking* LoggerUsart::m_usart = nullptr;
 LoggerUsart::LogLevel LoggerUsart::m_logLevel = LogLevel::LogLevelTrace;
