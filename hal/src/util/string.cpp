@@ -11,3 +11,7 @@ size_t String::length(const char* t_string) {
 
   return count;
 }
+
+char* concatenate(char* t_string1, char* t_string2) {
+  
+}
