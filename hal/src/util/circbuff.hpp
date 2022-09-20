@@ -32,7 +32,7 @@ namespace util {
       }
 
       bool isEmpty() const {
-        return (m_head == m_tail) ? true : false;
+        return (m_head == m_tail);
       }
 
       bool isFull() const {
